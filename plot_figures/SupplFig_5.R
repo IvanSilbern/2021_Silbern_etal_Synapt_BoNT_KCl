@@ -1,0 +1,82 @@
+
+local({
+  
+  library(data.table)
+  library(ggplot2)
+  
+  temp <- fread("Figures\\SupplFig_5\\ProteinGroups_HeLa_PhSites_Contrasts.txt", check.names = TRUE)
+  
+  names(temp)
+  
+  int_cols <- c("BTX01", "BTX02", "BTX03",
+                "Mock01", "Mock02", "Mock03",
+                "UT01", "UT02", "UT03")
+  
+  # Boxplots
+  pdf("Figures\\SupplFig_5\\SupplFig_5A.pdf", width = 9)
+  boxplot(log2(temp[, ..int_cols]))
+  dev.off()
+  
+  # BTX vs Mock
+  pdf("Figures\\SupplFig_5\\SupplFig_5B.pdf")
+  plot(y = -log10(temp$q.val),
+       x = temp$log2FC,
+       type = "n",
+       xlab = "log2-Ratio",
+       ylab = "-log10 qValue")
+  points(y = -log10(temp$q.val[!temp$Candidate & temp$Contrast == "BTX_Mock"]),
+         x = temp$log2FC[!temp$Candidate & temp$Contrast == "BTX_Mock"],
+         pch = 21,
+         bg = "lightgrey")
+  points(y = -log10(temp$q.val[temp$Candidate & temp$Contrast == "BTX_Mock"]),
+         x = temp$log2FC[temp$Candidate & temp$Contrast == "BTX_Mock"],
+         bg = "orange",
+         pch = 21)
+  abline(v = log2(1/1.5), col = "blue", lty = 3, lwd = 2)
+  abline(v = log2(1.5), col = "blue", lty = 3, lwd = 2)
+  abline(h = -log10(0.01), col = "blue", lty = 3, lwd = 2)
+  
+  dev.off()
+  
+  # Mock vs UT
+  pdf("Figures\\SupplFig_5\\SupplFig_5C.pdf")
+  plot(y = -log10(temp$q.val),
+       x = temp$log2FC,
+       type = "n",
+       xlab = "log2-Ratio",
+       ylab = "-log10 qValue")
+  points(y = -log10(temp$q.val[!temp$Candidate & temp$Contrast == "Mock_UT"]),
+         x = temp$log2FC[!temp$Candidate & temp$Contrast == "Mock_UT"],
+         pch = 21,
+         bg = "lightgrey")
+  points(y = -log10(temp$q.val[temp$Candidate & temp$Contrast == "Mock_UT"]),
+         x = temp$log2FC[temp$Candidate & temp$Contrast == "Mock_UT"],
+         bg = "orange",
+         pch = 21)
+  abline(v = log2(1/1.5), col = "blue", lty = 3, lwd = 2)
+  abline(v = log2(1.5), col = "blue", lty = 3, lwd = 2)
+  abline(h = -log10(0.01), col = "blue", lty = 3, lwd = 2)
+  
+  dev.off()
+  
+  # BTX vs UT
+  pdf("Figures\\SupplFig_5\\SupplFig_5D.pdf")
+  plot(y = -log10(temp$q.val),
+       x = temp$log2FC,
+       type = "n",
+       xlab = "log2-Ratio",
+       ylab = "-log10 qValue")
+  points(y = -log10(temp$q.val[!temp$Candidate & temp$Contrast == "BTX_UT"]),
+         x = temp$log2FC[!temp$Candidate & temp$Contrast == "BTX_UT"],
+         pch = 21,
+         bg = "lightgrey")
+  points(y = -log10(temp$q.val[temp$Candidate & temp$Contrast == "BTX_UT"]),
+         x = temp$log2FC[temp$Candidate & temp$Contrast == "BTX_UT"],
+         bg = "orange",
+         pch = 21)
+  abline(v = log2(1/1.5), col = "blue", lty = 3, lwd = 2)
+  abline(v = log2(1.5), col = "blue", lty = 3, lwd = 2)
+  abline(h = -log10(0.01), col = "blue", lty = 3, lwd = 2)
+  dev.off()
+  
+  })
