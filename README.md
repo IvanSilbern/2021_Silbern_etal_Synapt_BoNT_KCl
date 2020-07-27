@@ -26,7 +26,7 @@ Supplementary Data are gerenrated during the execution and stored in the woking 
 Intermediate data and plots used for comparsion with Engholm-Keller data are stored in the "/comparison_EK" folder directly. 
 Data used by ShinyApp for visualization of log2 fold changes in phosphorylation site intensities on proteins are stored in "/ShinyApp" folder.
 
-### required packages:
+### Required packages:
 
 - data.table (v. 1.12.8),
 - stringr(v. 1.4.0),
