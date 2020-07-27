@@ -26,6 +26,18 @@ Supplementary Data are gerenrated during the execution and stored in the woking 
 Intermediate data and plots used for comparsion with Engholm-Keller data are stored in the "/comparison_EK" folder directly. 
 Data used by ShinyApp for visualization of log2 fold changes in phosphorylation site intensities on proteins are stored in "/ShinyApp" folder.
 
+### required packages:
+
+- data.table (v. 1.12.8),
+- stringr(v. 1.4.0),
+- ggplot2 (v. 3.2.1),
+- scales (v. 1.1.0),
+- qvalue (v. 2.18.0),
+- limma (v. 3.42.0),
+- ggrepel (v. 0.8.1),
+- igraph (v. 1.2.4.2)
+- VennDiagram (v. 1.6.20)
+
 ### Session Info:
 ```
 R version 3.6.2 (2019-12-12)
@@ -42,18 +54,16 @@ attached base packages:
 [1] grid      stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] qvalue_2.18.0       limma_3.42.0        ggrepel_0.8.1       ggplot2_3.2.1       igraph_1.2.4.2     
- [6] VennDiagram_1.6.20  futile.logger_1.4.3 stringr_1.4.0       data.table_1.12.8   shiny_1.4.0        
+ [1] scales_1.1.0        qvalue_2.18.0       limma_3.42.0        ggrepel_0.8.1       ggplot2_3.2.1      
+ [6] igraph_1.2.4.2      VennDiagram_1.6.20  futile.logger_1.4.3 stringr_1.4.0       data.table_1.12.8  
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.3           plyr_1.8.5           compiler_3.6.2       pillar_1.4.2         later_1.0.0         
- [6] formatR_1.7          futile.options_1.0.1 tools_3.6.2          digest_0.6.23        lifecycle_0.1.0     
-[11] tibble_2.1.3         gtable_0.3.0         pkgconfig_2.0.3      rlang_0.4.2          rstudioapi_0.10     
-[16] fastmap_1.0.1        withr_2.1.2          dplyr_0.8.3          tidyselect_0.2.5     glue_1.3.1          
-[21] R6_2.4.1             reshape2_1.4.3       purrr_0.3.3          lambda.r_1.2.4       magrittr_1.5        
-[26] splines_3.6.2        scales_1.1.0         promises_1.1.0       htmltools_0.4.0      assertthat_0.2.1    
-[31] mime_0.7             xtable_1.8-4         colorspace_1.4-1     httpuv_1.5.2         stringi_1.4.3       
-[36] lazyeval_0.2.2       munsell_0.5.0        crayon_1.3.4        
+ [1] Rcpp_1.0.3           pillar_1.4.2         compiler_3.6.2       formatR_1.7          plyr_1.8.5          
+ [6] futile.options_1.0.1 tools_3.6.2          lifecycle_0.1.0      tibble_2.1.3         gtable_0.3.0        
+[11] pkgconfig_2.0.3      rlang_0.4.2          rstudioapi_0.10      withr_2.1.2          dplyr_0.8.3         
+[16] tidyselect_0.2.5     glue_1.3.1           R6_2.4.1             purrr_0.3.3          reshape2_1.4.3      
+[21] lambda.r_1.2.4       magrittr_1.5         splines_3.6.2        assertthat_0.2.1     colorspace_1.4-1    
+[26] stringi_1.4.3        lazyeval_0.2.2       munsell_0.5.0        crayon_1.3.4               
 ```
 
 
