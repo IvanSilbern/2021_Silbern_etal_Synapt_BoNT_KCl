@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+temp/
+ShinyApp/
+plots/
+Figures/
+external/
+comparison_EK/temp/
+comparison_EK/plots/

@@ -4,20 +4,21 @@
 # Check overlap in sequence windows
 
 # INPUT:
-# "comparison_EK\\Phosphosites_prepared_IS.tsv"
-# "comparison_EK\\Phosphosites_prepared_EK.tsv"
+# "comparison_EK\\temp\\Phosphosites_prepared_IS.tsv"
+# "comparison_EK\\temp\\Phosphosites_prepared_EK.tsv"
 
 # OUTPUT:
-# "comparison_EK\\BarPlot_Sites_Count.pdf"
-# "comparison_EK\\SeqWind_venn.tif"
+# "comparison_EK\\plots\\BarPlot_Sites_Count.pdf"
+# "comparison_EK\\plots\\SeqWind_venn.tif"
 # "Figures\\Fig_2A\\nr_quant_sites.txt"
-# "comparison_EK\\nr_quant_sites.txt"
-# "comparison_EK\\nr_quant_prot.txt"
-# "comparison_EK\\nr_quant_seqwind.txt"
+# "comparison_EK\\temp\\nr_quant_sites.txt"
+# "comparison_EK\\temp\\nr_quant_prot.txt"
+# "comparison_EK\\temp\\nr_quant_seqwind.txt"
 
 local({
     
   if(!dir.exists("Figures\\Fig_2A")) dir.create("Figures\\Fig_2A", recursive = TRUE)
+  if(!dir.exists("comparison_EK\\plots")) dir.create("comparison_EK\\plots")
   
   library(data.table)
   library(stringr)
@@ -25,8 +26,8 @@ local({
   library(VennDiagram)
 
 
-  ph_s <- fread("comparison_EK\\Phosphosites_prepared_IS.tsv")
-  ph_r <- fread("comparison_EK\\Phosphosites_prepared_EK.tsv")
+  ph_s <- fread("comparison_EK\\temp\\Phosphosites_prepared_IS.tsv")
+  ph_r <- fread("comparison_EK\\temp\\Phosphosites_prepared_EK.tsv")
   dim(ph_s)
   dim(ph_s[Localization.prob > 0.75])
   dim(ph_s[Localization.prob > 0.75 & (Intensity.Ca_EGTA_01 != 0 | Intensity.Ca_EGTA_02 != 0)])
@@ -141,7 +142,7 @@ local({
   sw <- list(s = unique(ph_s$Sequence.window_7[ph_s$Localization.prob > 0.75 & take_caegta]),
              e = unique(ph_r$Sequence.window_7[ph_r$Localization.prob > 0.75]))
 
-  venn.diagram(sw, filename = "comparison_EK\\SeqWind_venn.tif",
+  venn.diagram(sw, filename = "comparison_EK\\plots\\SeqWind_venn.tif",
                category.names = c("Silbern et al", "Engholm-Keller et al"),
                cex = 2, cat.pos = c(0, 21), cat.cex = 1.6)
   
@@ -151,12 +152,12 @@ local({
                                                    "Engholm-Keller et al:\nKCl vs Mock-Stim."))]
   df[, Localization_prob := factor(Localization_prob, levels = c("Any", "> 0.75"))]
   
-  fwrite(df, "comparison_EK\\nr_quant_sites.txt")
+  fwrite(df, "comparison_EK\\temp\\nr_quant_sites.txt")
   fwrite(df, "Figures\\Fig_2A\\nr_quant_sites.txt")
-  fwrite(df_prot, "comparison_EK\\nr_quant_prot.txt")
-  fwrite(df_sw, "comparison_EK\\nr_quant_seqwind.txt")
+  fwrite(df_prot, "comparison_EK\\temp\\nr_quant_prot.txt")
+  fwrite(df_sw, "comparison_EK\\temp\\nr_quant_seqwind.txt")
 
-  pdf("comparison_EK\\BarPlot_Sites_Count.pdf", width = 10)
+  pdf("comparison_EK\\plots\\BarPlot_Sites_Count.pdf", width = 10)
   g <- ggplot(df, aes(y = counts, x = Localization_prob, fill = Localization_prob))
   g <- g + facet_grid(~Experiment)
   g <- g + geom_col(alpha = 0.8)

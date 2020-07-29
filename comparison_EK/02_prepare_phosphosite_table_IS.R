@@ -15,11 +15,12 @@
 # "external\\data_Uniprot\\201902_uniprot-rat.fasta" fasta file used for database search
 
 # output:
-# "comparison_EK\\Phosphosites_prepared_IS.tsv"       accordingly modified "Phosphosites (STY).txt" table
+# "comparison_EK\\temp\\Phosphosites_prepared_IS.tsv"       accordingly modified "Phosphosites (STY).txt" table
 
 local({
   
   if(!dir.exists("temp")) dir.create("temp")
+  if(!dir.exists("comparison_EK\\temp")) dir.create("comparison_EK\\temp")
   
   library(data.table)
   library(stringr)
@@ -226,5 +227,5 @@ local({
                               "Amino.acid", "Sequence.window_7", "Sequence.window_15",
                               "Sequence.window_7_noSpace", "REVIEWED")], by.x = c("Protein", "id"), by.y = c("Accession", "id"))
   
-  fwrite(df, "comparison_EK\\Phosphosites_prepared_IS.tsv", sep = "\t")
+  fwrite(df, "comparison_EK\\temp\\Phosphosites_prepared_IS.tsv", sep = "\t")
   })

@@ -10,20 +10,23 @@
 # for the site to be quantified in the replicate
 
 # INPUT:
-# "comparison_EK\\Phosphosites_prepared_EK.tsv"
+# "comparison_EK\\temp\\Phosphosites_prepared_EK.tsv"
 
 # OUTPUT:
-# comparison_EK\\Reporter_Int_distributions.pdf
-# comparison_EK\\PhSiteContrasts_EK.tsv
+# comparison_EK\\plots\\Reporter_Int_distributions.pdf
+# comparison_EK\\temp\\PhSiteContrasts_EK.tsv
 
 local({
 
+  if(!dir.exists("comparison_EK\\temp")) dir.create("comparison_EK\\temp")
+  if(!dir.exists("comparison_EK\\plots")) dir.create("comparison_EK\\plots")
+  
   library(data.table)
   
   # minimum localization probability
   prob.cutoff <- 0.75
     
-  ph <- fread("comparison_EK\\Phosphosites_prepared_EK.tsv", check.names = TRUE, quote = "")
+  ph <- fread("comparison_EK\\temp\\Phosphosites_prepared_EK.tsv", check.names = TRUE, quote = "")
   
   # subset phosphosites with a given minimal localizatin probability
   message("Sites meeting the localization probability cutoff: ", sum(ph$Localization.prob >= prob.cutoff))
@@ -160,7 +163,7 @@ local({
   # split df based on Experiment
   temp <- split(temp, f = temp$Experiment)
   
-  pdf("comparison_EK\\Reporter_Int_distributions.pdf")
+  pdf("comparison_EK\\plots\\Reporter_Int_distributions.pdf")
   line_colors  <- c("black", "blue", "green", "cyan", "red")
   line_types   <- rep(1, 5)
   take.columns <- c("T0", "T1", "T2")
@@ -227,6 +230,6 @@ local({
                        "Sequence.window_7_noSpace")], 
                 temp, by = "id")
   
-  fwrite(temp, "comparison_EK\\PhSiteContrasts_EK.tsv", sep = "\t")
+  fwrite(temp, "comparison_EK\\temp\\PhSiteContrasts_EK.tsv", sep = "\t")
 
 })

@@ -6,11 +6,11 @@
 # for the same site are summed.
 
 # INPUT:
-# "comparison_EK\\PhSiteContrasts_EK.tsv"
+# "comparison_EK\\temp\\PhSiteContrasts_EK.tsv"
 # "temp\\PhPeptIntensities_slim.tsv"
 
 # OUTPUT:
-# "comparison_EK//Scatterplot_comparison_sign_76mM_10s.pdf"
+# "comparison_EK\\plots\\Scatterplot_comparison_sign_76mM_10s.pdf"
 # "Figures\\Fig_2D\\Log2FC_comparison_EK_IS.txt"
 # "Figures\\Fig_2D\\Log2FC_comparison_EK_IS_selected".txt
 
@@ -18,6 +18,7 @@
 local({
   
   if(!dir.exists("Figures\\Fig_2D")) dir.create("Figures\\Fig_2D", recursive = TRUE)
+  if(!dir.exists("comparison_EK\\plots")) dir.create("comparison_EK\\plots")
     
   library(ggrepel)
   library(data.table)
@@ -33,7 +34,7 @@ local({
   }
   
   # Load data
-  ph_r <- fread("comparison_EK\\PhSiteContrasts_EK.tsv")
+  ph_r <- fread("comparison_EK\\temp\\PhSiteContrasts_EK.tsv")
   ph_s <- fread("temp\\PhPeptIntensities_slim.tsv")
   
   # Use sum to combine different multiplicities; keep the minimum q value in each case
@@ -78,7 +79,7 @@ local({
                       "Dpysl5-S532")
   ph_sub2 <- ph_sub[Site_id %in% selected_sites]
 
-  pdf("comparison_EK\\Scatterplot_comparison_sign_76mM_10s.pdf", width = 7, height = 7)
+  pdf("comparison_EK\\plots\\Scatterplot_comparison_sign_76mM_10s.pdf", width = 7, height = 7)
   g <- ggplot(ph_sub, aes(x = log2FC.CaEGTA, y = T1.norm, label = Site_id))
   g <- g + geom_point(alpha = 0.6, color = "steelblue", size = 3)
   g <- g + geom_point(data = ph_sub2, color = "red", size = 3)
