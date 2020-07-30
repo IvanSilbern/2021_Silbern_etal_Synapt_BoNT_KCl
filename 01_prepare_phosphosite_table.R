@@ -138,7 +138,7 @@ local({
   df_prot[, Swiss.prot := grepl("^sp", fasta.header)]
   
   # Accession
-  df_prot[, Accession := Protein_single]
+  df_prot[, Accession := str_match(Protein_single, "\\|([^\\s]+)\\|")[,2]]
   
   # Accession w/o Isoform number
   df_prot[, Accession.noIso := gsub("-[0-9]+$", "", Accession)]
@@ -198,7 +198,7 @@ local({
     
     setTxtProgressBar(pb, i)
     
-    rank <- unlist(lapply(prots[[i]], function(x) df_prot_single$Protein_id[df_prot_single$Accession == x]))
+    rank <- unlist(lapply(prots[[i]], function(x) df_prot_single$Protein_id[df_prot_single$Protein_single == x]))
     new.order <- order(rank)
     rank <- rank[new.order]
     
@@ -219,7 +219,6 @@ local({
   
   temp[, Protein      := unlist(lapply(str_split(Proteins_sorted, ";"), "[", 1))]
   temp[, Accession    := unlist(lapply(str_split(Accessions_sorted, ";"), "[", 1))]
-  temp[, Accession    := str_match(Accession, "\\|([^\\s]+)\\|")[, 2]]
   temp[, Position     := unlist(lapply(str_split(Positions_sorted, ";"), "[", 1))]
   temp[, Gene.name    := unlist(lapply(str_split(Gene.names_sorted, ";"), "[", 1))]
   temp[, Fasta.header := unlist(lapply(str_split(Fasta.headers_sorted, ";"), "[", 1))]
@@ -228,9 +227,9 @@ local({
   df <- cbind(temp, df[, -c("Proteins", "Positions.within.proteins",
                             "Leading.proteins", "Protein",
                             "Fasta.headers", "Sequence.window", "Amino.acid", "Position")])
-  df <- merge(df, df_prot[, c("Accession", "id", "Protein.description",
+  df <- merge(df, df_prot[, c("Protein_single", "id", "Protein.description",
                               "Amino.acid", "Sequence.window_7", "Sequence.window_15",
-                              "Sequence.window_7_noSpace", "REVIEWED")], by.x = c("Protein", "id"), by.y = c("Accession", "id"))
+                              "Sequence.window_7_noSpace", "REVIEWED")], by.x = c("Protein", "id"), by.y = c("Protein_single", "id"))
   
   fwrite(df, "temp\\Phosphosites_prepared.tsv", sep = "\t")
   })
