@@ -18,6 +18,7 @@ local({
   
   library(data.table)
   library(ggplot2)
+  library(stringr)
   
   # Phoshpo data
   ph <- fread("temp\\PhPeptIntensities_slim.tsv")
@@ -34,6 +35,7 @@ local({
   ph[, netphorest_group_high := unlist(lapply(netphorest_group, function(x) x[length(x)]))]
   
   ph_cand <- ph[ph$Candidate.CaEGTA & !is.na(netphorest_group2)]
+  ph_cand <- ph_cand[!duplicated(ph_cand$id)]
   
   count_groups <- unique(ph_cand[, c("Gene.name", "netphorest_group2", "netphorest_group_high")])
   count_groups <- count_groups[, .N, by = c("netphorest_group2", "netphorest_group_high")]
