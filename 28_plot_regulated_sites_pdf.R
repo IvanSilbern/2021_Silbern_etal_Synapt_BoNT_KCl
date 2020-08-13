@@ -1,15 +1,15 @@
 # DO:
 #
-# plot proteins with regulated sites in CaEGTA or MockBTX experiments
+# plot proteins with regulated sites in CaEGTA or MockBoNT experiments
 
 # INPUT:
-# "temp\\PhPeptInt_BTX.tsv"
+# "temp\\PhPeptInt_BoNT.tsv"
 # "temp\\PhPeptInt_CaEGTA.tsv"
 # "temp\\Domains.tsv"
 
 # OUTPUT:
 # "SupplData5_Phosphoproteins_regulated_CaEGTA.pdf"
-# "SupplData6_Phosphoproteins_regulated_MockBTX.pdf"
+# "SupplData6_Phosphoproteins_regulated_MockBoNT.pdf"
 
 local({
   
@@ -156,7 +156,7 @@ local({
   }
   
   # log2FC
-  df_btx <- fread("temp\\PhPeptInt_BTX.tsv")
+  df_bont <- fread("temp\\PhPeptInt_BoNT.tsv")
   df_caegta <- fread("temp\\PhPeptInt_CaEGTA.tsv")
   
   # annotated domains
@@ -195,30 +195,30 @@ local({
   
   
   
-  # btx
+  # bont
   
   # sort by gene name
-  df_btx <- df_btx[order(Gene.name)]
+  df_bont <- df_bont[order(Gene.name)]
   
-  acc <- unique(df_btx$Accession[df_btx$Regulation_group != "not-regulated"])
+  acc <- unique(df_bont$Accession[df_bont$Regulation_group != "not-regulated"])
   length(acc)
   
-  # btx
+  # bont
   pb <- txtProgressBar(min = 1, max = length(acc), char = "*", style = 3)
   
-  pdf("SupplData6_Phosphoproteins_regulated_MockBTX.pdf", width = 10, height = 6)
+  pdf("SupplData6_Phosphoproteins_regulated_MockBoNT.pdf", width = 10, height = 6)
   
   for(i in seq_along(acc)){
     
     setTxtProgressBar(pb, i)
     
-    print(lineplotSites(df = df_btx[Accession == acc[i]],
+    print(lineplotSites(df = df_bont[Accession == acc[i]],
                         df_dom = dom[Accession == acc[i]],
-                        title = paste0(df_btx$Gene.name[df_btx$Accession == acc[i]][1]),
+                        title = paste0(df_bont$Gene.name[df_bont$Accession == acc[i]][1]),
                         subtitle = paste0("Uniprot Accession: ",
-                                          df_btx$Accession[df_btx$Accession == acc[i]][1],
+                                          df_bont$Accession[df_bont$Accession == acc[i]][1],
                                           "\n",
-                                          df_btx$Protein.description[df_btx$Accession == acc[i]][1])
+                                          df_bont$Protein.description[df_bont$Accession == acc[i]][1])
     ))
     
     

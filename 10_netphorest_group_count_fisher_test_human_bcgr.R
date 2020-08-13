@@ -35,10 +35,10 @@ local({
   # number of all sites - the number of sites regulated by a particular kinase group
   npgroup_count_all[, Out_all := ph[!is.na(ph$netphorest_group), .N] - In_all]
 
-  ####### Mock / BTX ##############
+  ####### Mock / BoNT ##############
   
   # subset candidates with annotated netphorest groups
-  ph_sub <- ph[ph$Candidate.BTX & !is.na(ph$netphorest_group2)]
+  ph_sub <- ph[ph$Candidate.BoNT & !is.na(ph$netphorest_group2)]
   ph_sub[, netphorest_group2 := sub("_group$", "", netphorest_group2)]
   
   unique(ph_sub$netphorest_group2)
@@ -101,13 +101,13 @@ local({
     
   }
   
-  BTX <- npgroup_count
-  BTX[, Percent_data := 100*N_count/Out]
-  BTX[, Percent_all := 100*In_all/Out_all]
-  BTX[, Percent_diff := Percent_data - Percent_all]
-  BTX <- cbind(BTX, p.val = p_value)
-  BTX[, p.adj := p.adjust(p.val, "BH")]
-  BTX[, Experiment := "BTX"]
+  BoNT <- npgroup_count
+  BoNT[, Percent_data := 100*N_count/Out]
+  BoNT[, Percent_all := 100*In_all/Out_all]
+  BoNT[, Percent_diff := Percent_data - Percent_all]
+  BoNT <- cbind(BoNT, p.val = p_value)
+  BoNT[, p.adj := p.adjust(p.val, "BH")]
+  BoNT[, Experiment := "BoNT"]
 
   ########## CaEGTA #################
   
@@ -184,7 +184,7 @@ local({
   CaEGTA[, Experiment := "CaEGTA"]
   
   # combine tables
-  df <- rbind(CaEGTA, BTX)
+  df <- rbind(CaEGTA, BoNT)
   df[, p.adj := p.adjust(p.val, "BH")]
   df <- df[order(-Experiment, -Percent_diff)]
   df <- df[, c("netphorest_group2", "N_count", "Out", "In_all", "Out_all", "p.val", "p.adj", "Experiment")]

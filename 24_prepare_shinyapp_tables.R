@@ -8,8 +8,8 @@
 # OUTPUT:
 # "temp\\PhPeptInt_long.tsv"
 # "temp\\PhPeptInt_CaEGTA.tsv"
-# "temp\\PhPeptInt_BTX.tsv"
-# "temp\\PhPeptInt_CaEGTA_BTX.tsv"
+# "temp\\PhPeptInt_BoNT.tsv"
+# "temp\\PhPeptInt_CaEGTA_BoNT.tsv"
 
 # prepare data
 local({
@@ -28,7 +28,7 @@ local({
   df <- dat[, c("Gene.name", "Accession", "Position", "Amino.acid", "Site_id", "Multiplicity",
                 grep("^CaEGTA.+\\.norm$", names(..dat), value = TRUE),
                 "log2FC.CaEGTA", "q.val.CaEGTA", "Regulation_group_resolved")]
-  df <- melt(df, measure.vars = grep("\\.norm", names(df), value = TRUE), variable.name = "Experiment", value.name = "Norm.intensity")
+  df <- melt(df, measure.vars = grep("\\.norm", names(df), value = TRUE), variable.name = "Experiment", value.name = "Norm.intensity", variable.factor = FALSE)
   names(df)[names(df) == "log2FC.CaEGTA"] <- "log2FC"
   names(df)[names(df) == "q.val.CaEGTA"]  <- "q.val"
   df <- df[!is.na(df$log2FC)]
@@ -57,13 +57,13 @@ local({
   # long format data
   df_long <- df
   
-  # prepare data frame with norm intensities in long format for BTX experiment
+  # prepare data frame with norm intensities in long format for BoNT experiment
   df <- dat[, c("Gene.name", "Accession", "Position", "Amino.acid", "Site_id", "Multiplicity",
-                grep("^MockBTX.+\\.norm$", names(..dat), value = TRUE),
-                "log2FC.BTX", "q.val.BTX", "Regulation_group_resolved")]
-  df <- melt(df, measure.vars = grep("\\.norm", names(df), value = TRUE), variable.name = "Experiment", value.name = "Norm.intensity")
-  names(df)[names(df) == "log2FC.BTX"] <- "log2FC"
-  names(df)[names(df) == "q.val.BTX"]  <- "q.val"
+                grep("^MockBoNT.+\\.norm$", names(..dat), value = TRUE),
+                "log2FC.BoNT", "q.val.BoNT", "Regulation_group_resolved")]
+  df <- melt(df, measure.vars = grep("\\.norm", names(df), value = TRUE), variable.name = "Experiment", value.name = "Norm.intensity", variable.factor = FALSE)
+  names(df)[names(df) == "log2FC.BoNT"] <- "log2FC"
+  names(df)[names(df) == "q.val.BoNT"]  <- "q.val"
 
   # select one multiplicity state based on the magnitude of log2FC
   # consider significantly regulated sites first
@@ -91,15 +91,15 @@ local({
   
   # ExperimentID
   df_long[grepl("^CaEGTA_01", df_long$Experiment), ExperimentID := "CaEGTA_01"]
-  df_long[grepl("^Ca_EGTA_02", df_long$Experiment), ExperimentID := "CaEGTA_02"]
-  df_long[grepl("^MockBTX_03", df_long$Experiment), ExperimentID := "BTX_01"]
-  df_long[grepl("^MockBTX_04", df_long$Experiment), ExperimentID := "BTX_02"]
+  df_long[grepl("^CaEGTA_02", df_long$Experiment), ExperimentID := "CaEGTA_02"]
+  df_long[grepl("^MockBoNT_03", df_long$Experiment), ExperimentID := "BoNT_01"]
+  df_long[grepl("^MockBoNT_04", df_long$Experiment), ExperimentID := "BoNT_02"]
   
   # Condition
   df_long[grepl("_Ca_", df_long$Experiment), Condition := "Ca"]
   df_long[grepl("_EGTA_", df_long$Experiment), Condition := "EGTA"]
   df_long[grepl("_Mock_", df_long$Experiment), Condition := "Mock"]
-  df_long[grepl("_BTX_", df_long$Experiment), Condition := "BTX"]
+  df_long[grepl("_BoNT_", df_long$Experiment), Condition := "BoNT"]
   
   fwrite(df_long, "temp\\PhPeptInt_long.tsv")
   
@@ -143,10 +143,10 @@ local({
   
   
 
-###### log2FC btx #####
+###### log2FC BoNT #####
   
-  df <- dat[!is.na(dat$log2FC.BTX)]
-  names(df)[names(df) == "log2FC.BTX"] <- "log2FC"
+  df <- dat[!is.na(dat$log2FC.BoNT)]
+  names(df)[names(df) == "log2FC.BoNT"] <- "log2FC"
   
   # select multiplicity with the highest magnitude
   temp <- df[df$Regulation_group_resolved != "not-regulated",
@@ -173,14 +173,14 @@ local({
   
   # merge with protein annotation
   df <- merge(df, annot, by = "Accession", all.x = TRUE)
-  fwrite(df, "temp\\PhPeptInt_BTX.tsv")
+  fwrite(df, "temp\\PhPeptInt_BoNT.tsv")
   
   
 
-##### log2FC caegta_btx #####
+##### log2FC caegta_BoNT #####
   
-  df <- dat[!is.na(dat$log2FC.CaEGTA_BTX)]
-  names(df)[names(df) == "log2FC.CaEGTA_BTX"] <- "log2FC"
+  df <- dat[!is.na(dat$log2FC.CaEGTA_BoNT)]
+  names(df)[names(df) == "log2FC.CaEGTA_BoNT"] <- "log2FC"
   
   # select multiplicity with the highest magnitude
   temp <- df[df$Regulation_group_resolved != "not-regulated",
@@ -206,6 +206,6 @@ local({
   
   # merge with protein annotation
   df <- merge(df, annot, by = "Accession", all.x = TRUE)
-  fwrite(df, "temp\\PhPeptInt_CaEGTA_BTX.tsv")
+  fwrite(df, "temp\\PhPeptInt_CaEGTA_BoNT.tsv")
   
 })

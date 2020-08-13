@@ -44,8 +44,8 @@ local({
                  )
   
   test_cols <- c("log2FC.CaEGTA", "p.mod.CaEGTA", "q.val.CaEGTA", "Candidate.CaEGTA",
-                 "log2FC.BTX", "p.mod.BTX", "q.val.BTX", "Candidate.BTX",
-                 "log2FC.CaEGTA_BTX",
+                 "log2FC.BoNT", "p.mod.BoNT", "q.val.BoNT", "Candidate.BoNT",
+                 "log2FC.CaEGTA_BoNT",
                  "Regulation_group_resolved"
                  )
   
@@ -61,18 +61,18 @@ local({
                 "CaEGTA_02_EGTA_01",
                 "CaEGTA_02_EGTA_02",
                 "CaEGTA_02_EGTA_03",
-                "MockBTX_03_Mock_01",
-                "MockBTX_03_Mock_02",
-                "MockBTX_03_Mock_03",
-                "MockBTX_03_BTX_01",
-                "MockBTX_03_BTX_02",
-                "MockBTX_03_BTX_03",
-                "MockBTX_04_Mock_01",
-                "MockBTX_04_Mock_02",
-                "MockBTX_04_Mock_03",
-                "MockBTX_04_BTX_01",
-                "MockBTX_04_BTX_02",
-                "MockBTX_04_BTX_03"
+                "MockBoNT_03_Mock_01",
+                "MockBoNT_03_Mock_02",
+                "MockBoNT_03_Mock_03",
+                "MockBoNT_03_BoNT_01",
+                "MockBoNT_03_BoNT_02",
+                "MockBoNT_03_BoNT_03",
+                "MockBoNT_04_Mock_01",
+                "MockBoNT_04_Mock_02",
+                "MockBoNT_04_Mock_03",
+                "MockBoNT_04_BoNT_01",
+                "MockBoNT_04_BoNT_02",
+                "MockBoNT_04_BoNT_03"
                 )
   
   int_cols.norm <- c("CaEGTA_01_Ca_01.norm",
@@ -87,30 +87,30 @@ local({
                      "CaEGTA_02_EGTA_01.norm",
                      "CaEGTA_02_EGTA_02.norm",
                      "CaEGTA_02_EGTA_03.norm",
-                     "MockBTX_03_Mock_01.norm",
-                     "MockBTX_03_Mock_02.norm",
-                     "MockBTX_03_Mock_03.norm",
-                     "MockBTX_03_BTX_01.norm",
-                     "MockBTX_03_BTX_02.norm",
-                     "MockBTX_03_BTX_03.norm",
-                     "MockBTX_04_Mock_01.norm",
-                     "MockBTX_04_Mock_02.norm",
-                     "MockBTX_04_Mock_03.norm",
-                     "MockBTX_04_BTX_01.norm",
-                     "MockBTX_04_BTX_02.norm",
-                     "MockBTX_04_BTX_03.norm"
+                     "MockBoNT_03_Mock_01.norm",
+                     "MockBoNT_03_Mock_02.norm",
+                     "MockBoNT_03_Mock_03.norm",
+                     "MockBoNT_03_BoNT_01.norm",
+                     "MockBoNT_03_BoNT_02.norm",
+                     "MockBoNT_03_BoNT_03.norm",
+                     "MockBoNT_04_Mock_01.norm",
+                     "MockBoNT_04_Mock_02.norm",
+                     "MockBoNT_04_Mock_03.norm",
+                     "MockBoNT_04_BoNT_01.norm",
+                     "MockBoNT_04_BoNT_02.norm",
+                     "MockBoNT_04_BoNT_03.norm"
   )
   
   df_sub <- df[, c(..take_cols, ..int_cols, ..int_cols.norm, ..test_cols)]
   
-  names(df_sub)[grepl("\\.BTX", names(df_sub))]
-  names(df_sub) <- gsub("\\.BTX", "\\.MockBTX", names(df_sub))
-  test_cols     <- gsub("\\.BTX", "\\.MockBTX", test_cols)
+  names(df_sub)[grepl("\\.BoNT", names(df_sub))]
+  names(df_sub) <- gsub("\\.BoNT", "\\.MockBoNT", names(df_sub))
+  test_cols     <- gsub("\\.BoNT", "\\.MockBoNT", test_cols)
   
   names(df_sub)[names(df_sub) == "Regulation_group_resolved"] <- "Regulation.group"
   names(df_sub)[names(df_sub) == "Kin_gen"] <- "Kinase_gene"
   names(df_sub)[names(df_sub) == "Kin_mapping"] <- "Kinase_mapping"
-  names(df_sub)[names(df_sub) == "log2FC.CaEGTA_BTX"] <- "log2FC.CaEGTA_MockBTX"  
+  names(df_sub)[names(df_sub) == "log2FC.CaEGTA_BoNT"] <- "log2FC.CaEGTA_MockBoNT"  
   
   df_sub[, Site_id := paste0(Accession, "_", Amino.acid, Position, "_", Multiplicity)]
   fwrite(df_sub, "SupplData01_Phosphosite_Intensities.txt", sep = "\t")

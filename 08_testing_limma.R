@@ -11,13 +11,13 @@
 # 
 # "plots\\Reporter_Int_distributions.pdf"
 # "plots\\Pvalue_histogram_CaEGTA.pdf"
-# "plots\\Pvalue_histogram_BTX.pdf"
+# "plots\\Pvalue_histogram_BoNT.pdf"
 #
 # "temp\\PhPeptIntensities.tsv"
 # "temp\\PhPeptIntensities_slim.tsv"
 # "temp\\PhPeptIntensities_log2FC_long.tsv"
 # "temp\\PhPeptIntensities_int_long.tsv"
-# "temp\\Candidate_GeneNames_BTX.tsv"
+# "temp\\Candidate_GeneNames_BoNT.tsv"
 # "temp\\Candidate_GeneNames_CaEGTA.tsv"
 
 local({
@@ -149,19 +149,19 @@ local({
   }
   dev.off()
   
-  names(temp[["BTX_AD_01"]]) <- gsub("X1", "MockBTX_03_Mock_01", names(temp[["BTX_AD_01"]]))
-  names(temp[["BTX_AD_01"]]) <- gsub("X2", "MockBTX_03_BTX_01",  names(temp[["BTX_AD_01"]]))
-  names(temp[["BTX_AD_01"]]) <- gsub("X3", "MockBTX_03_Mock_02", names(temp[["BTX_AD_01"]]))
-  names(temp[["BTX_AD_01"]]) <- gsub("X4", "MockBTX_03_BTX_02",  names(temp[["BTX_AD_01"]]))
-  names(temp[["BTX_AD_01"]]) <- gsub("X5", "MockBTX_03_BTX_03",  names(temp[["BTX_AD_01"]]))
-  names(temp[["BTX_AD_01"]]) <- gsub("X6", "MockBTX_03_Mock_03", names(temp[["BTX_AD_01"]]))
+  names(temp[["BTX_AD_01"]]) <- gsub("X1", "MockBoNT_03_Mock_01", names(temp[["BTX_AD_01"]]))
+  names(temp[["BTX_AD_01"]]) <- gsub("X2", "MockBoNT_03_BoNT_01",  names(temp[["BTX_AD_01"]]))
+  names(temp[["BTX_AD_01"]]) <- gsub("X3", "MockBoNT_03_Mock_02", names(temp[["BTX_AD_01"]]))
+  names(temp[["BTX_AD_01"]]) <- gsub("X4", "MockBoNT_03_BoNT_02",  names(temp[["BTX_AD_01"]]))
+  names(temp[["BTX_AD_01"]]) <- gsub("X5", "MockBoNT_03_BoNT_03",  names(temp[["BTX_AD_01"]]))
+  names(temp[["BTX_AD_01"]]) <- gsub("X6", "MockBoNT_03_Mock_03", names(temp[["BTX_AD_01"]]))
   
-  names(temp[["BTX_CB_02"]]) <- gsub("X1", "MockBTX_04_Mock_01", names(temp[["BTX_CB_02"]]))
-  names(temp[["BTX_CB_02"]]) <- gsub("X2", "MockBTX_04_BTX_01",  names(temp[["BTX_CB_02"]]))
-  names(temp[["BTX_CB_02"]]) <- gsub("X3", "MockBTX_04_Mock_02", names(temp[["BTX_CB_02"]]))
-  names(temp[["BTX_CB_02"]]) <- gsub("X4", "MockBTX_04_BTX_02",  names(temp[["BTX_CB_02"]]))
-  names(temp[["BTX_CB_02"]]) <- gsub("X5", "MockBTX_04_Mock_03", names(temp[["BTX_CB_02"]]))
-  names(temp[["BTX_CB_02"]]) <- gsub("X6", "MockBTX_04_BTX_03",  names(temp[["BTX_CB_02"]]))
+  names(temp[["BTX_CB_02"]]) <- gsub("X1", "MockBoNT_04_Mock_01", names(temp[["BTX_CB_02"]]))
+  names(temp[["BTX_CB_02"]]) <- gsub("X2", "MockBoNT_04_BoNT_01",  names(temp[["BTX_CB_02"]]))
+  names(temp[["BTX_CB_02"]]) <- gsub("X3", "MockBoNT_04_Mock_02", names(temp[["BTX_CB_02"]]))
+  names(temp[["BTX_CB_02"]]) <- gsub("X4", "MockBoNT_04_BoNT_02",  names(temp[["BTX_CB_02"]]))
+  names(temp[["BTX_CB_02"]]) <- gsub("X5", "MockBoNT_04_Mock_03", names(temp[["BTX_CB_02"]]))
+  names(temp[["BTX_CB_02"]]) <- gsub("X6", "MockBoNT_04_BoNT_03",  names(temp[["BTX_CB_02"]]))
   
   names(temp[["Ca_EGTA_01"]]) <- gsub("X1", "CaEGTA_01_Ca_01",   names(temp[["Ca_EGTA_01"]]))
   names(temp[["Ca_EGTA_01"]]) <- gsub("X2", "CaEGTA_01_Ca_02",   names(temp[["Ca_EGTA_01"]]))
@@ -200,7 +200,7 @@ int_cols_norm <- sort(int_cols[grepl("\\.norm", int_cols)])
 int_cols      <- sort(int_cols[!grepl("\\.norm", int_cols)])
 
 ### analysis
-# separate Ca_EGTA Experiment and BTX experiment
+# separate Ca_EGTA Experiment and BoNT experiment
 
 # Ca_EGTA
 CaEGTA <- temp[, c("id", "Multiplicity", grep("CaEGTA", names(..temp), value = TRUE))]
@@ -291,24 +291,24 @@ abline(h = -log10(pvalue.threshold), col = "blue", lty = 3, lwd = 3)
 
 dev.off()
 
-# noTox_BTX
-BTX <- temp[, c("id", "Multiplicity", grep("MockBTX", names(..temp), value = TRUE))]
-to.delete <- BTX[, apply(.SD, 1, function(x) any(is.na(x))), .SDcols = c(grep("MockBTX", names(temp), value = TRUE))]
-BTX <- BTX[!to.delete]
-dim(BTX)
+# noTox_BoNT
+BoNT <- temp[, c("id", "Multiplicity", grep("MockBoNT", names(..temp), value = TRUE))]
+to.delete <- BoNT[, apply(.SD, 1, function(x) any(is.na(x))), .SDcols = c(grep("MockBoNT", names(temp), value = TRUE))]
+BoNT <- BoNT[!to.delete]
+dim(BoNT)
 
-intensity.names <- grep("MockBTX", int_cols_norm, value = TRUE)
+intensity.names <- grep("MockBoNT", int_cols_norm, value = TRUE)
 
-tr  <- c("BTX", "BTX", "BTX", "Mock", "Mock", "Mock", "BTX", "BTX", "BTX", "Mock", "Mock", "Mock")
-tr  <- factor(tr, levels = c("BTX", "Mock"))
+tr  <- c("BoNT", "BoNT", "BoNT", "Mock", "Mock", "Mock", "BoNT", "BoNT", "BoNT", "Mock", "Mock", "Mock")
+tr  <- factor(tr, levels = c("BoNT", "Mock"))
 ex  <- as.factor(c(rep(1, 6), rep(2, 6)))
 
 design <- model.matrix(~ ex + tr)
 
 # fit models
-fit <- lmFit(BTX[, ..intensity.names], design = design)
+fit <- lmFit(BoNT[, ..intensity.names], design = design)
 
-n      <- dim(BTX[, ..intensity.names])[1]
+n      <- dim(BoNT[, ..intensity.names])[1]
 fit.eb <- eBayes(fit)
 log2FC <- fit.eb$coef[, "trMock"]
 df.0   <- rep(fit.eb$df.prior, n)
@@ -329,7 +329,7 @@ sum(q.val < 0.01, na.rm = T)
 res.eb.mult <- data.table(log2FC, t.ord, t.mod, p.ord, p.mod, df.r, df.0, s2.0, s2, s2.post, q.val)
 
 # plot p value distribution
-pdf("plots\\Pvalue_histogram_BTX.pdf")
+pdf("plots\\Pvalue_histogram_BoNT.pdf")
 hist(res.eb.mult$p.mod, breaks = 100)
 dev.off()
 
@@ -339,21 +339,21 @@ hist(p.adj, breaks = 100)
 
 sum(p.adj < 0.01)
 
-BTX <- cbind(BTX, res.eb.mult)
-BTX[, p.adj.BH := ..p.adj]
+BoNT <- cbind(BoNT, res.eb.mult)
+BoNT[, p.adj.BH := ..p.adj]
 
 # determine candidates
-candidates <- BTX$q.val   < pvalue.threshold &
-  (BTX$log2FC  < log2(1/fc.threshold) |
-   BTX$log2FC > log2(fc.threshold))
+candidates <- BoNT$q.val   < pvalue.threshold &
+  (BoNT$log2FC  < log2(1/fc.threshold) |
+   BoNT$log2FC > log2(fc.threshold))
 sum(candidates)
 
-BTX[, Candidate := ..candidates]
-BTX[, Enriched  := FALSE]
-BTX[log2FC > 0, Enriched := TRUE]
+BoNT[, Candidate := ..candidates]
+BoNT[, Enriched  := FALSE]
+BoNT[log2FC > 0, Enriched := TRUE]
 
 # do volcano plot
-pdf("plots\\Volcano_qVal_log2FC_BTX.pdf")
+pdf("plots\\Volcano_qVal_log2FC_BoNT.pdf")
 
 plot(y = -log10(CaEGTA$q.val),
      x = CaEGTA$log2FC,
@@ -362,14 +362,14 @@ plot(y = -log10(CaEGTA$q.val),
      #xlim = c(-2, 2),
      type = "n",
      #main = "-log10 Q-value vs log2 Ratio",
-     xlab = "log2-Ratio (Mock / BTX)",
+     xlab = "log2-Ratio (Mock / BoNT)",
      ylab = "-log10 q-value")
-points(y = -log10(BTX$q.val[!BTX$Candidate]),
-       x =  BTX$log2FC[!BTX$Candidate],
+points(y = -log10(BoNT$q.val[!BoNT$Candidate]),
+       x =  BoNT$log2FC[!BoNT$Candidate],
        pch = 21,
        bg  = "lightgrey")
-points(y = -log10(BTX$q.val[BTX$Candidate]),
-       x =  BTX$log2FC[BTX$Candidate],
+points(y = -log10(BoNT$q.val[BoNT$Candidate]),
+       x =  BoNT$log2FC[BoNT$Candidate],
        bg = "orange",
        pch = 21)
 
@@ -386,7 +386,7 @@ fwrite(merge(ph[, c("id", "Accession", "Gene.name", "Amino.acid", "Position")],
        "Figures\\Fig_2BC\\Fig_2B_source.txt", sep = "\t")
 
 fwrite(merge(ph[, c("id", "Accession", "Gene.name", "Amino.acid", "Position")],
-             BTX[, c("id", "Multiplicity", "log2FC", "p.mod", "q.val", "Candidate")],
+             BoNT[, c("id", "Multiplicity", "log2FC", "p.mod", "q.val", "Candidate")],
              by = "id"),
        "Figures\\Fig_2BC\\Fig_2C_source.txt", sep = "\t")
 
@@ -407,9 +407,9 @@ ph <- ph[, ..take_columns]
 exclude_columns <- c("t.ord", "t.mod", "p.ord", "df.r", "df.0", "s2.0", "s2", "s2.post")
 
 ph_comb <- merge(CaEGTA[, -c(..exclude_columns)],
-                 BTX[, -c(..exclude_columns)],
+                 BoNT[, -c(..exclude_columns)],
                  by = c("id", "Multiplicity"),
-                 suffixes = c(".CaEGTA", ".BTX"), all = TRUE)
+                 suffixes = c(".CaEGTA", ".BoNT"), all = TRUE)
 ph_comb <- merge(ph, ph_comb, by = "id", all.y = TRUE)
 dim(ph_comb)
 
@@ -417,7 +417,7 @@ ph_comb_slim <- ph_comb[, -c(..int_cols, ..int_cols_norm)]
 dim(ph_comb_slim)
 
 # long data table format based on log2FC
-ph_comb_long <- melt(ph_comb_slim, measure.vars = c("log2FC.CaEGTA", "log2FC.BTX"), variable.name = "Experiment", value.name = "log2FC")
+ph_comb_long <- melt(ph_comb_slim, measure.vars = c("log2FC.CaEGTA", "log2FC.BoNT"), variable.name = "Experiment", value.name = "log2FC")
 ph_comb_long[, Experiment := gsub("log2FC\\.", "", Experiment)]
 dim(ph_comb_long)
 
@@ -427,29 +427,29 @@ ph_comb_int_long <- melt(ph_comb_int_long, measure.vars = int_cols_norm,
                          variable.name = "ReplicateID", value.name = "Norm.intensity")
 
 ph_comb_int_long[, Experiment := "CaEGTA"]
-ph_comb_int_long[grep("^MockBTX", ReplicateID), Experiment := "MockBTX"]
+ph_comb_int_long[grep("^MockBoNT", ReplicateID), Experiment := "MockBoNT"]
 ph_comb_int_long[, Condition := str_match(ReplicateID, "_([^\\d]+)_")[, 2]]
 ph_comb_int_long[, Replicate := str_match(ReplicateID, "_(0[123])\\.norm$")[, 2]]
 
 ph_comb_int_long <- ph_comb_int_long[, c("id", "Protein", "Protein.description", "Position", "Multiplicity", "Amino.acid", "Gene.name",
-                                         "log2FC.CaEGTA", "log2FC.BTX", "q.val.CaEGTA", "q.val.BTX",
-                                         "Candidate.CaEGTA", "Candidate.BTX", "ReplicateID", "Norm.intensity",
+                                         "log2FC.CaEGTA", "log2FC.BoNT", "q.val.CaEGTA", "q.val.BoNT",
+                                         "Candidate.CaEGTA", "Candidate.BoNT", "ReplicateID", "Norm.intensity",
                                          "Experiment", "Replicate", "Condition")]
 
 gen_CaEGTA <- unique(ph_comb[Candidate.CaEGTA == TRUE, Gene.name])
 gen_CaEGTA <- gen_CaEGTA[!is.na(gen_CaEGTA)]
 length(gen_CaEGTA)
 
-gen_BTX <- unique(ph_comb[Candidate.BTX == TRUE, Gene.name])
-gen_BTX <- gen_BTX[!is.na(gen_BTX)]
-length(gen_BTX)
+gen_BoNT <- unique(ph_comb[Candidate.BoNT == TRUE, Gene.name])
+gen_BoNT <- gen_BoNT[!is.na(gen_BoNT)]
+length(gen_BoNT)
 
 fwrite(ph_comb,          "temp\\PhPeptIntensities.tsv", sep = "\t", na = "NA")
 fwrite(ph_comb_slim,     "temp\\PhPeptIntensities_slim.tsv", sep = "\t", na = "NA")
 fwrite(ph_comb_long,     "temp\\PhPeptIntensities_log2FC_long.tsv", sep = "\t", na = "NA")
 fwrite(ph_comb_int_long, "temp\\PhPeptIntensities_int_long.tsv", sep = "\t", na = "NA")
 
-fwrite(list(gen_BTX),    "temp\\Candidate_GeneNames_BTX.tsv", col.names = FALSE)
+fwrite(list(gen_BoNT),    "temp\\Candidate_GeneNames_BoNT.tsv", col.names = FALSE)
 fwrite(list(gen_CaEGTA), "temp\\Candidate_GeneNames_CaEGTA.tsv", col.names = FALSE)
 
 })

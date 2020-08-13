@@ -11,9 +11,9 @@
 # "Figures\\SupplFig_6\\Ph_events_netphorest.txt"
 # "Figures\\Fig_2EF\\Ph_events_netphorest.txt"
 # "plots\\NetphorestGroups_Count_CaEGTA.pdf"
-# "plots\\NetphorestGroups_Count_BTX.pdf"
+# "plots\\NetphorestGroups_Count_BoNT.pdf"
 # "plots\\NetphorestGroups_Count_CaEGTA_red.pdf"
-# "plots\\NetphorestGroups_Count_BTX_red.pdf"
+# "plots\\NetphorestGroups_Count_BoNT_red.pdf"
 
 local({
   
@@ -31,14 +31,14 @@ local({
   fwrite(ph[, c("id", "Gene.name", "Accession",
                 "Amino.acid", "Position", "Multiplicity",
                 "q.val.CaEGTA", "log2FC.CaEGTA", "Candidate.CaEGTA",
-                "q.val.BTX", "log2FC.BTX", "Candidate.BTX", "netphorest_group")],
+                "q.val.BoNT", "log2FC.BoNT", "Candidate.BoNT", "netphorest_group")],
          "Figures\\SupplFig_6\\Ph_events_netphorest.txt",
          sep = "\t")
   
   fwrite(ph[, c("id", "Gene.name", "Accession",
                 "Amino.acid", "Position", "Multiplicity",
                 "q.val.CaEGTA", "log2FC.CaEGTA", "Candidate.CaEGTA",
-                "q.val.BTX", "log2FC.BTX", "Candidate.BTX", "netphorest_group")],
+                "q.val.BoNT", "log2FC.BoNT", "Candidate.BoNT", "netphorest_group")],
          "Figures\\Fig_2EF\\Ph_events_netphorest.txt",
          sep = "\t")
 
@@ -131,37 +131,37 @@ local({
   ph_Ca[, netphorest_group2 := factor(netphorest_group2, levels = unique(npgroup_count_high_Ca$netphorest_group2))]
   
 
-#### Mock/BTX experiment ####
+#### Mock/BoNT experiment ####
   
   # subset candidates from Ca experiment with annotated netphorest groups
-  ph_BTX <- ph[ph$Candidate.BTX & !is.na(ph$netphorest_group)]
-  ph_BTX[, z_scores := (log2FC.BTX - mean(log2FC.BTX)) / sd(log2FC.BTX)]
-  ph_BTX[, Site     :=  paste0(Gene.name, "_", Amino.acid, Position)]
-  ph_BTX[, Regulation := "Down"]
-  ph_BTX[log2FC.BTX > 0, Regulation := "Up"]
+  ph_BoNT <- ph[ph$Candidate.BoNT & !is.na(ph$netphorest_group)]
+  ph_BoNT[, z_scores := (log2FC.BoNT - mean(log2FC.BoNT)) / sd(log2FC.BoNT)]
+  ph_BoNT[, Site     :=  paste0(Gene.name, "_", Amino.acid, Position)]
+  ph_BoNT[, Regulation := "Down"]
+  ph_BoNT[log2FC.BoNT > 0, Regulation := "Up"]
   
   # number of candidate sites by netphorest group
-  npgroup_count_BTX  <- ph_BTX[, list(N_count = .N,
+  npgroup_count_BoNT  <- ph_BoNT[, list(N_count = .N,
                                     N_up    = sum(Regulation == "Up"),
                                     N_down  = sum(Regulation == "Down")), by = netphorest_group2]
-  npgroup_count_BTX <- npgroup_count_BTX[order(N_count), ]
-  npgroup_count_BTX[, Out := ph_BTX[, .N] - N_count]
+  npgroup_count_BoNT <- npgroup_count_BoNT[order(N_count), ]
+  npgroup_count_BoNT[, Out := ph_BoNT[, .N] - N_count]
 
 
   # test changes in number of up/down regulated sites #####
   
   cont_tables <- list()
-  for(i in 1:nrow(npgroup_count_BTX)){
+  for(i in 1:nrow(npgroup_count_BoNT)){
     
-    cont_tables[[i]] <- matrix(c(npgroup_count_BTX$N_up[i],
-                                 npgroup_count_BTX$N_down[i],
-                                 sum(ph$log2FC.BTX[!is.na(ph$log2FC.BTX)] > 0),
-                                 sum(ph$log2FC.BTX[!is.na(ph$log2FC.BTX)] < 0)),
+    cont_tables[[i]] <- matrix(c(npgroup_count_BoNT$N_up[i],
+                                 npgroup_count_BoNT$N_down[i],
+                                 sum(ph$log2FC.BoNT[!is.na(ph$log2FC.BoNT)] > 0),
+                                 sum(ph$log2FC.BoNT[!is.na(ph$log2FC.BoNT)] < 0)),
                                nrow = 2, byrow = TRUE,
                                dimnames = list(Candidate = c("In", "Out"), Background = c("In", "Out")))
     
   }
-  names(cont_tables) <- npgroup_count_BTX$netphorest_group2
+  names(cont_tables) <- npgroup_count_BoNT$netphorest_group2
   cont_tables[1]
   
   p_value <- numeric()
@@ -180,31 +180,31 @@ local({
 #### prepare for plotting ####
   
   # order netphorest groups
-  npgroup_count_BTX <- npgroup_count_BTX[order(N_count)]
-  npgroup_count_BTX <- npgroup_count_BTX[!is.na(netphorest_group2)]
+  npgroup_count_BoNT <- npgroup_count_BoNT[order(N_count)]
+  npgroup_count_BoNT <- npgroup_count_BoNT[!is.na(netphorest_group2)]
   
   # mark kinase groups that show significant deregulation of up or down-phosphorylated sites
-  npgroup_count_BTX[, np_marked := netphorest_group2]
-  npgroup_count_BTX[npgroup_count_BTX$netphorest_group2 %in% deregulated_updown, np_marked := paste0("* ", netphorest_group2)]
+  npgroup_count_BoNT[, np_marked := netphorest_group2]
+  npgroup_count_BoNT[npgroup_count_BoNT$netphorest_group2 %in% deregulated_updown, np_marked := paste0("* ", netphorest_group2)]
   
   # order by high level netphorest groups
-  npgroup_count_high_BTX  <- ph_BTX[, list(N_count = .N,
+  npgroup_count_high_BoNT  <- ph_BoNT[, list(N_count = .N,
                                          N_up    = sum(Regulation == "Up"),
                                          N_down  = sum(Regulation == "Down")), by = c("netphorest_group_high", "netphorest_group2")]
-  npgroup_count_high_BTX <- npgroup_count_high_BTX[order(-N_count), ]
-  unique(npgroup_count_high_BTX$netphorest_group_high)
-  temp <- split(npgroup_count_high_BTX, npgroup_count_high_BTX$netphorest_group_high, sorted = FALSE)[unique(npgroup_count_high_BTX$netphorest_group_high)]
-  npgroup_count_high_BTX <- rbindlist(temp)
-  npgroup_count_high_BTX <- npgroup_count_high_BTX[nrow(npgroup_count_high_BTX) : 1]
-  npgroup_count_high_BTX[, np_marked := netphorest_group2]
-  npgroup_count_high_BTX[npgroup_count_high_BTX$netphorest_group2 %in% deregulated_updown, np_marked := paste0("* ", netphorest_group2)]
+  npgroup_count_high_BoNT <- npgroup_count_high_BoNT[order(-N_count), ]
+  unique(npgroup_count_high_BoNT$netphorest_group_high)
+  temp <- split(npgroup_count_high_BoNT, npgroup_count_high_BoNT$netphorest_group_high, sorted = FALSE)[unique(npgroup_count_high_BoNT$netphorest_group_high)]
+  npgroup_count_high_BoNT <- rbindlist(temp)
+  npgroup_count_high_BoNT <- npgroup_count_high_BoNT[nrow(npgroup_count_high_BoNT) : 1]
+  npgroup_count_high_BoNT[, np_marked := netphorest_group2]
+  npgroup_count_high_BoNT[npgroup_count_high_BoNT$netphorest_group2 %in% deregulated_updown, np_marked := paste0("* ", netphorest_group2)]
 
   # sort netphorest groups based on the sorting of the higher kinase groups
-  ph_BTX[, netphorest_group2 := factor(netphorest_group2, levels = unique(npgroup_count_high_BTX$netphorest_group2))]
+  ph_BoNT[, netphorest_group2 := factor(netphorest_group2, levels = unique(npgroup_count_high_BoNT$netphorest_group2))]
 
 ##### plot CaEGTA #####
   
-  max_y_limit <- 1.1*max(c(npgroup_count_Ca$N_count, npgroup_count_BTX$N_count))
+  max_y_limit <- 1.1*max(c(npgroup_count_Ca$N_count, npgroup_count_BoNT$N_count))
   x_side <- round(max_y_limit/nrow(npgroup_count_Ca), 0) / 2
   
   # higher group annotation
@@ -263,27 +263,27 @@ local({
   
   dev.off()
 
-##### plot Mock/BTX #####
+##### plot Mock/BoNT #####
   
-  temp_BTX <- data.table(label = c("STE",
+  temp_BoNT <- data.table(label = c("STE",
                                "CAMK group",
                                "CK",
                                "AGC group", 
                                "CMGC group"),
                      xmin = c(5, 8, 14, 16, 27),
                      xmax = c(7, 13, 15, 26, 33),
-                     ymin = rep(max(npgroup_count_BTX$N_count) -10, 5),
-                     ymax = rep(max(npgroup_count_BTX$N_count) -10, 5))
-  temp_BTX <- merge(temp_BTX, temp_Ca[, c("label", "col")], by = "label", all.x = TRUE)
+                     ymin = rep(max(npgroup_count_BoNT$N_count) -10, 5),
+                     ymax = rep(max(npgroup_count_BoNT$N_count) -10, 5))
+  temp_BoNT <- merge(temp_BoNT, temp_Ca[, c("label", "col")], by = "label", all.x = TRUE)
   
   
-  pdf("plots\\NetphorestGroups_Count_BTX.pdf", width = 13, heigh = 8)
+  pdf("plots\\NetphorestGroups_Count_BoNT.pdf", width = 13, heigh = 8)
   
-  g <- ggplot(ph_BTX[!(is.na(netphorest_group) | netphorest_group == "")], aes(x = netphorest_group2))
+  g <- ggplot(ph_BoNT[!(is.na(netphorest_group) | netphorest_group == "")], aes(x = netphorest_group2))
   g <- g + geom_bar(aes(fill = Regulation))
   g <- g + scale_fill_manual(breaks = c("Up", "Down"), values = c("lightblue", "orange"))
   g <- g + scale_y_continuous(expand = c(0, 1), limits = c(-x_side, max_y_limit))
-  g <- g + scale_x_discrete(labels = npgroup_count_high_BTX$np_marked)
+  g <- g + scale_x_discrete(labels = npgroup_count_high_BoNT$np_marked)
   g <- g + coord_flip()
   g <- g + labs(title = "Netphorest Groups")
   g <- g + xlab("") + ylab("Number of regulated phosphorylation sites")
@@ -292,23 +292,23 @@ local({
                  plot.margin = unit(c(1, 1, 1, 0), "cm")
                   )
   g <- g + annotate("rect",
-                    xmin = temp_BTX$xmin-0.4,
-                    xmax = temp_BTX$xmax+0.4,
+                    xmin = temp_BoNT$xmin-0.4,
+                    xmax = temp_BoNT$xmax+0.4,
                     ymin = -x_side,
                     ymax = -1,
-                    fill = temp_BTX$col)
+                    fill = temp_BoNT$col)
   
   g <- g + annotate("rect",
-                    xmin = temp_BTX$xmin-0.4,
-                    xmax = temp_BTX$xmax+0.4,
+                    xmin = temp_BoNT$xmin-0.4,
+                    xmax = temp_BoNT$xmax+0.4,
                     ymin = max_y_limit - 10,
                     ymax = max_y_limit - 5,  
-                    fill = scales::alpha(temp_BTX$col, 0.6))
+                    fill = scales::alpha(temp_BoNT$col, 0.6))
   
   
-  g <- g + annotate("text", x = (temp_BTX$xmin + temp_BTX$xmax)/2,
+  g <- g + annotate("text", x = (temp_BoNT$xmin + temp_BoNT$xmax)/2,
                     y = max_y_limit - 10,
-                    label = temp_BTX$label,
+                    label = temp_BoNT$label,
                     size = 3,
                     fontface = "bold",
                     angle = -90,
@@ -318,8 +318,6 @@ local({
   print(g)
   
   dev.off()
-  
-  })
 
 ### reduced graphs
 
@@ -328,7 +326,7 @@ local({
 ph_Ca <- ph_Ca[ph_Ca$netphorest_group2 %in% npgroup_count_Ca$netphorest_group2[npgroup_count_Ca$N_count > 10]]
 npgroup_count_high_Ca <- npgroup_count_high_Ca[npgroup_count_high_Ca$netphorest_group2 %in% npgroup_count_Ca$netphorest_group2[npgroup_count_Ca$N_count > 10]]
 
-max_y_limit <- 1.1*max(c(npgroup_count_Ca$N_count, npgroup_count_BTX$N_count))
+max_y_limit <- 1.1*max(c(npgroup_count_Ca$N_count, npgroup_count_BoNT$N_count))
 x_side <- round(max_y_limit/nrow(npgroup_count_Ca), 0) / 2
 
 
@@ -385,29 +383,29 @@ print(g)
 
 dev.off()
 
-# BTX
+# BoNT
 
-ph_BTX <- ph_BTX[ph_BTX$netphorest_group2 %in% npgroup_count_BTX$netphorest_group2[npgroup_count_BTX$N_count > 10]]
-npgroup_count_high_BTX <- npgroup_count_high_BTX[npgroup_count_high_BTX$netphorest_group2 %in% npgroup_count_BTX$netphorest_group2[npgroup_count_BTX$N_count > 10]]
+ph_BoNT <- ph_BoNT[ph_BoNT$netphorest_group2 %in% npgroup_count_BoNT$netphorest_group2[npgroup_count_BoNT$N_count > 10]]
+npgroup_count_high_BoNT <- npgroup_count_high_BoNT[npgroup_count_high_BoNT$netphorest_group2 %in% npgroup_count_BoNT$netphorest_group2[npgroup_count_BoNT$N_count > 10]]
 
-temp_BTX <- data.table(label = c("STE",
+temp_BoNT <- data.table(label = c("STE",
                                  "CAMK",
                                  "CK",
                                  "AGC", 
                                  "CMGC"),
                       xmin = c(1, 2, 4, 5, 7),
                       xmax = c(1, 3, 4, 6, 11),
-                      ymin = rep(max(npgroup_count_BTX$N_count) -10, 5),
-                      ymax = rep(max(npgroup_count_BTX$N_count) -10, 5))
-temp_BTX <- merge(temp_BTX, temp_Ca[, c("label", "col")], by = "label", all.x = TRUE)
+                      ymin = rep(max(npgroup_count_BoNT$N_count) -10, 5),
+                      ymax = rep(max(npgroup_count_BoNT$N_count) -10, 5))
+temp_BoNT <- merge(temp_BoNT, temp_Ca[, c("label", "col")], by = "label", all.x = TRUE)
 
-pdf("plots\\NetphorestGroups_Count_BTX_red.pdf", width = 10, heigh = 7)
+pdf("plots\\NetphorestGroups_Count_BoNT_red.pdf", width = 10, heigh = 7)
 
-g <- ggplot(ph_BTX[ph_BTX$netphorest_group2 != ""], aes(x = netphorest_group2))
+g <- ggplot(ph_BoNT[ph_BoNT$netphorest_group2 != ""], aes(x = netphorest_group2))
 g <- g + geom_bar(aes(fill = Regulation))
 g <- g + scale_fill_manual(breaks = c("Up", "Down"), values = c("lightblue", "orange"))
 g <- g + scale_y_continuous(expand = c(0, 1), limits = c(-x_side, max_y_limit))
-g <- g + scale_x_discrete(labels = npgroup_count_high_BTX$netphorest_group2)
+g <- g + scale_x_discrete(labels = npgroup_count_high_BoNT$netphorest_group2)
 g <- g + coord_flip()
 g <- g + ggtitle("Netphorest Groups")
 g <- g + xlab("") + ylab("# regulated phosphorylation sites")
@@ -424,19 +422,21 @@ g <- g + theme(axis.text.y = element_text(face = "bold",
                )
 
 g <- g + annotate("rect",
-                  xmin = temp_BTX$xmin-0.45,
-                  xmax = temp_BTX$xmax+0.45,
+                  xmin = temp_BoNT$xmin-0.45,
+                  xmax = temp_BoNT$xmax+0.45,
                   ymin = -x_side,
                   ymax = -1,
-                  fill = temp_BTX$col)
+                  fill = temp_BoNT$col)
 
 g <- g + annotate("rect",
-                  xmin = temp_BTX$xmin-0.45,
-                  xmax = temp_BTX$xmax+0.45,
+                  xmin = temp_BoNT$xmin-0.45,
+                  xmax = temp_BoNT$xmax+0.45,
                   ymin = max_y_limit - 0.03*max_y_limit,
                   ymax = max_y_limit - 0.01*max_y_limit,  
-                  fill = scales::alpha(temp_BTX$col, 0.6))
+                  fill = scales::alpha(temp_BoNT$col, 0.6))
 
 print(g)
 
 dev.off()
+
+})

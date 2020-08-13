@@ -4,13 +4,13 @@
 
 # INPUT:
 # "temp\\PhPeptInt_long.tsv"
-# "temp\\PhPeptInt_BTX.tsv"
+# "temp\\PhPeptInt_BoNT.tsv"
 # "temp\\PhPeptInt_CaEGTA.tsv"
 # "temp\\Domains.tsv"
 
 # OUTPUT:
 # "ShinyApp\\dat_int.Rdata"
-# "ShinyApp\\df_btx.Rdata"
+# "ShinyApp\\df_bont.Rdata"
 # "ShinyApp\\df_caegta.Rdata"
 # "ShinyApp\\dom.Rdata"
 # "ShinyApp\\gn_acc.Rdata"
@@ -33,8 +33,8 @@ local({
   save(dat_int, file = "ShinyApp\\dat_int.Rdata")
   
   # log2FC
-  df_btx <- fread("temp\\PhPeptInt_BTX.tsv")
-  save(df_btx, file = "ShinyApp\\df_btx.Rdata")
+  df_bont <- fread("temp\\PhPeptInt_BoNT.tsv")
+  save(df_bont, file = "ShinyApp\\df_bont.Rdata")
   
   df_caegta <- fread("temp\\PhPeptInt_CaEGTA.tsv")
   save(df_caegta, file = "ShinyApp\\df_caegta.Rdata")
@@ -44,7 +44,7 @@ local({
   save(dom, file = "ShinyApp\\dom.Rdata")
   
   # gene names and accessions
-  gn_acc <- rbind(df_btx[, c("Gene.name", "Accession", "Regulation_group", "Protein.description", "Function")],
+  gn_acc <- rbind(df_bont[, c("Gene.name", "Accession", "Regulation_group", "Protein.description", "Function")],
                   df_caegta[, c("Gene.name", "Accession", "Regulation_group", "Protein.description", "Function")])
   
   # extract gene names
@@ -65,7 +65,7 @@ local({
   
   
   # modified positions
-  positions <- rbind(df_btx[, c("Accession", "Position")],
+  positions <- rbind(df_bont[, c("Accession", "Position")],
                      df_caegta[, c("Accession", "Position")])
   positions <- positions[!duplicated(positions)]
   positions <- positions[order(Position)]

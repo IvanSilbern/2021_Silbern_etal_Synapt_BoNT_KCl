@@ -2,7 +2,7 @@
 # prepare svg plots for shiny app
 
 # INPUT:
-# "temp\\PhPeptInt_BTX.tsv"
+# "temp\\PhPeptInt_BoNT.tsv"
 # "temp\\PhPeptInt_CaEGTA.tsv"
 # "temp\\Domains.tsv"
 
@@ -19,7 +19,7 @@ local({
   library(svglite)
   
   if(!dir.exists("ShinyApp\\Lineplots_CaEGTA")) dir.create("ShinyApp\\Lineplots_CaEGTA", recursive = TRUE)
-  if(!dir.exists("ShinyApp\\Lineplots_BTX")) dir.create("ShinyApp\\Lineplots_BTX", recursive = TRUE)
+  if(!dir.exists("ShinyApp\\Lineplots_BoNT")) dir.create("ShinyApp\\Lineplots_BoNT", recursive = TRUE)
   
   lineplotSites <- function(df, df_dom, pos = NA, title = "", subtitle = "",
                             y_limit = NA, y_limit_avg = 2.0,
@@ -159,7 +159,7 @@ local({
   }
   
   # log2FC
-  df_btx <- fread("temp\\PhPeptInt_BTX.tsv")
+  df_bont <- fread("temp\\PhPeptInt_BoNT.tsv")
   df_caegta <- fread("temp\\PhPeptInt_CaEGTA.tsv")
   
   # annotated domains
@@ -171,7 +171,7 @@ local({
                       df_dom = dom[Accession == "_Empty"])
   dev.off()
   
-  svglite(paste0("ShinyApp\\Lineplots_BTX\\", "_Empty", ".svg"), width = 10, height = 7)
+  svglite(paste0("ShinyApp\\Lineplots_BoNT\\", "_Empty", ".svg"), width = 10, height = 7)
   lineplotSites(df = df_caegta[Accession == "_Empty"],
                       df_dom = dom[Accession == "_Empty"])
   dev.off()
@@ -194,8 +194,8 @@ local({
     
   }
   
-  # btx
-  acc <- unique(df_btx$Accession)
+  # bont
+  acc <- unique(df_bont$Accession)
   
   pb <- txtProgressBar(min = 1, max = length(acc), char = "*", style = 3)
   
@@ -203,8 +203,8 @@ local({
     
     setTxtProgressBar(pb, i)
     
-    svglite(paste0("ShinyApp\\Lineplots_BTX\\", acc[i], ".svg"), width = 10, height = 7)
-    print(lineplotSites(df = df_btx[Accession == acc[i]],
+    svglite(paste0("ShinyApp\\Lineplots_BoNT\\", acc[i], ".svg"), width = 10, height = 7)
+    print(lineplotSites(df = df_bont[Accession == acc[i]],
                         df_dom = dom[Accession == acc[i]]))
     dev.off()
     

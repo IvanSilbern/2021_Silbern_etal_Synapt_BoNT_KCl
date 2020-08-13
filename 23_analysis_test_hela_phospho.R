@@ -7,8 +7,8 @@
 # "search_results\\Test_Hela_Ph\\combined\\txt\\Phospho (STY)Sites.txt"
 
 # OUTPUT:
-# "plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BTX_UT.pdf"
-# "plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BTX_Mock.pdf"
+# "plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BoNT_UT.pdf"
+# "plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BoNT_Mock.pdf"
 # "plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_Mock_UT.pdf"
 # "Figures\\SupplFig_5\\ProteinGroups_HeLa_PhSites_Contrasts.tsv"
 
@@ -94,7 +94,7 @@ local({
         int_cols_norm <- paste0(int_cols, ".norm")
         
         # define samples
-        samples <- factor(c("BTX", "BTX", "BTX", "Mock", "Mock", "Mock", "UT", "UT", "UT"), levels = c("BTX", "Mock", "UT"))
+        samples <- factor(c("BoNT", "BoNT", "BoNT", "Mock", "Mock", "Mock", "UT", "UT", "UT"), levels = c("BoNT", "Mock", "UT"))
         design <- model.matrix(~0 + samples)
         colnames(design) <- levels(samples)
         
@@ -102,8 +102,8 @@ local({
         fit <- lmFit(temp[, ..int_cols_norm], design = design)
         
         # specify contrasts
-        cont.matrix <- makeContrasts(BTX_UT = BTX - UT,
-                                     BTX_Mock = BTX - Mock,
+        cont.matrix <- makeContrasts(BoNT_UT = BoNT - UT,
+                                     BoNT_Mock = BoNT - Mock,
                                      Mock_UT = Mock - UT,
                                      levels = design)
         
@@ -158,18 +158,18 @@ local({
         temp[, Enriched := FALSE]
         temp[which(temp$log2FC > 0), Enriched := TRUE]
         
-        pdf("plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BTX_UT.pdf")
+        pdf("plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BoNT_UT.pdf")
         plot(y = -log10(temp$q.val),
              x = temp$log2FC,
              type = "n",
              xlab = "log2-Ratio",
              ylab = "-log10 qValue")
-        points(y = -log10(temp$q.val[!temp$Candidate & temp$Contrast == "BTX_UT"]),
-               x = temp$log2FC[!temp$Candidate & temp$Contrast == "BTX_UT"],
+        points(y = -log10(temp$q.val[!temp$Candidate & temp$Contrast == "BoNT_UT"]),
+               x = temp$log2FC[!temp$Candidate & temp$Contrast == "BoNT_UT"],
                pch = 21,
                bg = "lightgrey")
-        points(y = -log10(temp$q.val[temp$Candidate & temp$Contrast == "BTX_UT"]),
-               x = temp$log2FC[temp$Candidate & temp$Contrast == "BTX_UT"],
+        points(y = -log10(temp$q.val[temp$Candidate & temp$Contrast == "BoNT_UT"]),
+               x = temp$log2FC[temp$Candidate & temp$Contrast == "BoNT_UT"],
                bg = "orange",
                pch = 21)
         abline(v = log2(1/1.5), col = "blue", lty = 3, lwd = 2)
@@ -177,18 +177,18 @@ local({
         abline(h = -log10(0.01), col = "blue", lty = 3, lwd = 2)
         dev.off()
         
-        pdf("plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BTX_Mock.pdf")
+        pdf("plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BoNT_Mock.pdf")
         plot(y = -log10(temp$q.val),
              x = temp$log2FC,
              type = "n",
              xlab = "log2-Ratio",
              ylab = "-log10 qValue")
-        points(y = -log10(temp$q.val[!temp$Candidate & temp$Contrast == "BTX_Mock"]),
-               x = temp$log2FC[!temp$Candidate & temp$Contrast == "BTX_Mock"],
+        points(y = -log10(temp$q.val[!temp$Candidate & temp$Contrast == "BoNT_Mock"]),
+               x = temp$log2FC[!temp$Candidate & temp$Contrast == "BoNT_Mock"],
                pch = 21,
                bg = "lightgrey")
-        points(y = -log10(temp$q.val[temp$Candidate & temp$Contrast == "BTX_Mock"]),
-               x = temp$log2FC[temp$Candidate & temp$Contrast == "BTX_Mock"],
+        points(y = -log10(temp$q.val[temp$Candidate & temp$Contrast == "BoNT_Mock"]),
+               x = temp$log2FC[temp$Candidate & temp$Contrast == "BoNT_Mock"],
                bg = "orange",
                pch = 21)
         abline(v = log2(1/1.5), col = "blue", lty = 3, lwd = 2)

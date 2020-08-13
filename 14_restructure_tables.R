@@ -21,8 +21,8 @@ local({
   names(df)
   dim(df)
   
-  # compute CaEGTA - BTX
-  df[,      log2FC.CaEGTA_BTX := log2FC.CaEGTA - log2FC.BTX]
+  # compute CaEGTA - BoNT
+  df[,      log2FC.CaEGTA_BoNT := log2FC.CaEGTA - log2FC.BoNT]
   
   #Add Site id
   df[, Site_id := paste0(Gene.name, "-", Position, Amino.acid)]
@@ -35,48 +35,48 @@ local({
   # distribute sites in different regulation groups
   fc_cut <- log2(1.2)
   # not regulated
-  df[(log2FC.CaEGTA_BTX <  fc_cut & log2FC.CaEGTA_BTX > -fc_cut) & (log2FC.BTX <  fc_cut & log2FC.BTX > -fc_cut), Regulation_group := "not-regulated"]
+  df[(log2FC.CaEGTA_BoNT <  fc_cut & log2FC.CaEGTA_BoNT > -fc_cut) & (log2FC.BoNT <  fc_cut & log2FC.BoNT > -fc_cut), Regulation_group := "not-regulated"]
   # cycling-dependent
-  df[(log2FC.CaEGTA_BTX <  fc_cut & log2FC.CaEGTA_BTX > -fc_cut) & (log2FC.BTX >  fc_cut), Regulation_group := "Cycling-dependent"]
-  df[(log2FC.CaEGTA_BTX <  fc_cut & log2FC.CaEGTA_BTX > -fc_cut) & (log2FC.BTX < -fc_cut), Regulation_group := "Cycling-dependent"]
+  df[(log2FC.CaEGTA_BoNT <  fc_cut & log2FC.CaEGTA_BoNT > -fc_cut) & (log2FC.BoNT >  fc_cut), Regulation_group := "Cycling-dependent"]
+  df[(log2FC.CaEGTA_BoNT <  fc_cut & log2FC.CaEGTA_BoNT > -fc_cut) & (log2FC.BoNT < -fc_cut), Regulation_group := "Cycling-dependent"]
   # Ca-compensating
-  df[(log2FC.CaEGTA_BTX < -fc_cut) & (log2FC.BTX >  fc_cut), Regulation_group := "Ca-compensating"]
-  df[(log2FC.CaEGTA_BTX >  fc_cut) & (log2FC.BTX < -fc_cut), Regulation_group := "Ca-compensating"]
+  df[(log2FC.CaEGTA_BoNT < -fc_cut) & (log2FC.BoNT >  fc_cut), Regulation_group := "Ca-compensating"]
+  df[(log2FC.CaEGTA_BoNT >  fc_cut) & (log2FC.BoNT < -fc_cut), Regulation_group := "Ca-compensating"]
   # Ca-enhancing
-  df[(log2FC.CaEGTA_BTX >  fc_cut) & (log2FC.BTX >  fc_cut), Regulation_group := "Ca-enhancing"]
-  df[(log2FC.CaEGTA_BTX < -fc_cut) & (log2FC.BTX < -fc_cut), Regulation_group := "Ca-enhancing"]
+  df[(log2FC.CaEGTA_BoNT >  fc_cut) & (log2FC.BoNT >  fc_cut), Regulation_group := "Ca-enhancing"]
+  df[(log2FC.CaEGTA_BoNT < -fc_cut) & (log2FC.BoNT < -fc_cut), Regulation_group := "Ca-enhancing"]
   # Ca-dependent
-  df[(log2FC.CaEGTA_BTX >  fc_cut) & (log2FC.BTX <  fc_cut & log2FC.BTX > -fc_cut), Regulation_group := "Ca-dependent"]
-  df[(log2FC.CaEGTA_BTX < -fc_cut) & (log2FC.BTX <  fc_cut & log2FC.BTX > -fc_cut), Regulation_group := "Ca-dependent"]
+  df[(log2FC.CaEGTA_BoNT >  fc_cut) & (log2FC.BoNT <  fc_cut & log2FC.BoNT > -fc_cut), Regulation_group := "Ca-dependent"]
+  df[(log2FC.CaEGTA_BoNT < -fc_cut) & (log2FC.BoNT <  fc_cut & log2FC.BoNT > -fc_cut), Regulation_group := "Ca-dependent"]
   
   # direction
-  df[log2FC.CaEGTA_BTX >  fc_cut, Regulation_direction := "pos"]
-  df[log2FC.CaEGTA_BTX < -fc_cut, Regulation_direction := "neg"]
-  df[Regulation_group == "Cycling-dependent" & log2FC.BTX >  fc_cut, Regulation_direction := "pos"]
-  df[Regulation_group == "Cycling-dependent" & log2FC.BTX < -fc_cut, Regulation_direction := "neg"]
+  df[log2FC.CaEGTA_BoNT >  fc_cut, Regulation_direction := "pos"]
+  df[log2FC.CaEGTA_BoNT < -fc_cut, Regulation_direction := "neg"]
+  df[Regulation_group == "Cycling-dependent" & log2FC.BoNT >  fc_cut, Regulation_direction := "pos"]
+  df[Regulation_group == "Cycling-dependent" & log2FC.BoNT < -fc_cut, Regulation_direction := "neg"]
   
-  # Ca-dependent if regulated in CaEGTA but not found in BTX experiment
-  df[which(abs(log2FC.CaEGTA) > fc_cut & is.na(Candidate.BTX)), Regulation_group := "Ca-dependent"]
-  df[log2FC.CaEGTA >  fc_cut & is.na(Candidate.BTX), Regulation_direction := "pos"]
-  df[log2FC.CaEGTA < -fc_cut & is.na(Candidate.BTX), Regulation_direction := "neg"]
+  # Ca-dependent if regulated in CaEGTA but not found in BoNT experiment
+  df[which(abs(log2FC.CaEGTA) > fc_cut & is.na(Candidate.BoNT)), Regulation_group := "Ca-dependent"]
+  df[log2FC.CaEGTA >  fc_cut & is.na(Candidate.BoNT), Regulation_direction := "pos"]
+  df[log2FC.CaEGTA < -fc_cut & is.na(Candidate.BoNT), Regulation_direction := "neg"]
   
-  # Cyclin-dependent if regulated in BTX experiment but not found in CaEGTA experiment
-  df[which(abs(log2FC.BTX) > fc_cut & is.na(Candidate.CaEGTA)), Regulation_group := "Cycling-dependent"]
-  df[log2FC.BTX >  fc_cut & is.na(Candidate.CaEGTA), Regulation_direction := "pos"]
-  df[log2FC.BTX < -fc_cut & is.na(Candidate.CaEGTA), Regulation_direction := "neg"]
+  # Cyclin-dependent if regulated in BoNT experiment but not found in CaEGTA experiment
+  df[which(abs(log2FC.BoNT) > fc_cut & is.na(Candidate.CaEGTA)), Regulation_group := "Cycling-dependent"]
+  df[log2FC.BoNT >  fc_cut & is.na(Candidate.CaEGTA), Regulation_direction := "pos"]
+  df[log2FC.BoNT < -fc_cut & is.na(Candidate.CaEGTA), Regulation_direction := "neg"]
   
   
-  # Cycling-dependent group should show q.val.BTX < 0.01
+  # Cycling-dependent group should show q.val.BoNT < 0.01
   # Ca-dependent group should show q.val.CaEGTA < 0.01
-  # Ca-compensating or Ca-enhancing group should show q.val < 0.01 in either CaEGTA or BTX
+  # Ca-compensating or Ca-enhancing group should show q.val < 0.01 in either CaEGTA or BoNT
   
   dim(df)
   df[, Significance := FALSE]
   
-  df[Regulation_group == "Cycling-dependent" & q.val.BTX < 0.01, Significance := TRUE]
+  df[Regulation_group == "Cycling-dependent" & q.val.BoNT < 0.01, Significance := TRUE]
   df[Regulation_group == "Ca-dependent" & q.val.CaEGTA < 0.01, Significance := TRUE]
-  df[Regulation_group == "Ca-compensating" & (q.val.CaEGTA < 0.01 | q.val.BTX < 0.01), Significance := TRUE]
-  df[Regulation_group == "Ca-enhancing" & (q.val.CaEGTA < 0.01 | q.val.BTX < 0.01), Significance := TRUE]
+  df[Regulation_group == "Ca-compensating" & (q.val.CaEGTA < 0.01 | q.val.BoNT < 0.01), Significance := TRUE]
+  df[Regulation_group == "Ca-enhancing" & (q.val.CaEGTA < 0.01 | q.val.BoNT < 0.01), Significance := TRUE]
   
   df[is.na(df$Regulation_group), Regulation_group := "not-regulated"]
   

@@ -40,8 +40,8 @@ local({
   # Use sum to combine different multiplicities; keep the minimum q value in each case
   temp <- ph_s[, list(log2FC.CaEGTA = sum(log2FC.CaEGTA),
                       q.val.CaEGTA = min(q.val.CaEGTA),
-                      log2FC.BTX = sum(log2FC.BTX),
-                      q.val.BTX = min(q.val.BTX)),
+                      log2FC.BoNT = sum(log2FC.BoNT),
+                      q.val.BoNT = min(q.val.BoNT)),
                by = "id"]
 
   # remove duplicated values due to different multiplicities

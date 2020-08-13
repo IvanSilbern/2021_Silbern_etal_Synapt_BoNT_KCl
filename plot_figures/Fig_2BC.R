@@ -1,7 +1,7 @@
 library(data.table)
 
 CaEGTA <- fread("Figures\\Fig_2BC\\Fig_2B_source.txt")
-BTX    <- fread("Figures\\Fig_2BC\\Fig_2C_source.txt")
+BoNT    <- fread("Figures\\Fig_2BC\\Fig_2C_source.txt")
 
 pvalue.threshold <- 0.01
 fc.threshold <- 1.2
@@ -41,14 +41,14 @@ plot(y = -log10(CaEGTA$q.val),
      #xlim = c(-2, 2),
      type = "n",
      #main = "-log10 Q-value vs log2 Ratio",
-     xlab = "log2-Ratio (Mock / BTX)",
+     xlab = "log2-Ratio (Mock / BoNT)",
      ylab = "-log10 q-value")
-points(y = -log10(BTX$q.val[!BTX$Candidate]),
-       x =  BTX$log2FC[!BTX$Candidate],
+points(y = -log10(BoNT$q.val[!BoNT$Candidate]),
+       x =  BoNT$log2FC[!BoNT$Candidate],
        pch = 21,
        bg  = "lightgrey")
-points(y = -log10(BTX$q.val[BTX$Candidate]),
-       x =  BTX$log2FC[BTX$Candidate],
+points(y = -log10(BoNT$q.val[BoNT$Candidate]),
+       x =  BoNT$log2FC[BoNT$Candidate],
        bg = "orange",
        pch = 21)
 

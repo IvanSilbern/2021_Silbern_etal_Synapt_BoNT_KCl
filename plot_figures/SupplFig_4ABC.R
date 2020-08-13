@@ -3,18 +3,18 @@ local({
   library(data.table)
   library(ggplot2)
   
-  temp <- fread("Figures\\SupplFig_4ABC\\ProteinGroups_MockBTX_AD.txt")
+  temp <- fread("Figures\\SupplFig_4ABC\\ProteinGroups_MockBoNT_AD.txt")
   temp_sub <- temp[Gene.name %in% c("Vamp2", "Stx1a", "Snap25", "Actb")]
   
   int_cols_norm <- c("Mock_01.norm", "Mock_02.norm", "Mock_03.norm",
-                     "BTX_01.norm", "BTX_02.norm", "BTX_03.norm")
+                     "BoNT_01.norm", "BoNT_02.norm", "BoNT_03.norm")
   temp_sub <- melt(temp_sub[, c("Gene.name", ..int_cols_norm)], measure.vars = int_cols_norm)
   temp_sub[, variable := gsub("\\.norm$", "", variable)]
-  temp_sub[, variable := factor(variable, levels = c("Mock_01", "Mock_02", "Mock_03", "BTX_01", "BTX_02", "BTX_03"))]
+  temp_sub[, variable := factor(variable, levels = c("Mock_01", "Mock_02", "Mock_03", "BoNT_01", "BoNT_02", "BoNT_03"))]
   
   
   pdf("Figures\\SupplFig_4ABC\\SupplFig_4A.pdf")
-  boxplot(temp[, c("Mock_01", "Mock_02", "Mock_03", "BTX_01", "BTX_02", "BTX_03")])
+  boxplot(temp[, c("Mock_01", "Mock_02", "Mock_03", "BoNT_01", "BoNT_02", "BoNT_03")])
   dev.off()
   
   pdf("Figures\\SupplFig_4ABC\\SupplFig_4B.pdf")

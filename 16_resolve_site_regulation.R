@@ -3,7 +3,7 @@
 # select regulation group for sites
 # that were quantified with several multiplicities
 # and two or more "multiplicity" versions of the site are significantly regulated.
-# Prefer phosphorylation events for which both log2FC are defined, in CaEGTA and MockBTX.
+# Prefer phosphorylation events for which both log2FC are defined, in CaEGTA and MockBoNT.
 # If two multiplisity state have only one log2FC defined (only possible if Ca-dep. or Cycling-dep.),
 # and their regulation groups are different (one is Ca-dep., another is Cycling-dep.), consider the site
 # as Ca-compensating
@@ -35,12 +35,12 @@ local({
   dim(df)
   
   # select sites that are significantly regulated at several multiplicities
-  dupl <- df[df$Significance & (df$Site_id4 %in% df$Site_id4[duplicated(df$Site_id4)]), c("Site_id4", "Site_id3", "Multiplicity", "Regulation_group", "log2FC.CaEGTA", "log2FC.BTX")]
+  dupl <- df[df$Significance & (df$Site_id4 %in% df$Site_id4[duplicated(df$Site_id4)]), c("Site_id4", "Site_id3", "Multiplicity", "Regulation_group", "log2FC.CaEGTA", "log2FC.BoNT")]
   dim(dupl)
   
-  # prefer phospho events that have valid log2FC for CaEGTA and BTX experiments
+  # prefer phospho events that have valid log2FC for CaEGTA and BoNT experiments
   dupl[, valid := FALSE]
-  dupl[!is.na(log2FC.CaEGTA) & !is.na(log2FC.BTX), valid := TRUE]
+  dupl[!is.na(log2FC.CaEGTA) & !is.na(log2FC.BoNT), valid := TRUE]
   
   # take those events that have valid log2FC in both experiments
   dupl_valid <- dupl[dupl$valid]
@@ -84,8 +84,8 @@ local({
   dupl_valid <- dupl_valid[!dupl_valid$Site_id4 %in% temp$Site_id4[temp$Regulation_group != "ambiguous"]]
   
   # select Regulation_group based on stronges Ca-effect (Cycling-dependent will loose against Ca-dependent or Ca-compensating groups)
-  dupl_valid[, log2FC.CaEGTA_BTX := log2FC.CaEGTA - log2FC.BTX]
-  dupl_valid <- dupl_valid[, list(Regulation_group = Regulation_group[which.max(abs(log2FC.CaEGTA_BTX))]), by = "Site_id4"]
+  dupl_valid[, log2FC.CaEGTA_BoNT := log2FC.CaEGTA - log2FC.BoNT]
+  dupl_valid <- dupl_valid[, list(Regulation_group = Regulation_group[which.max(abs(log2FC.CaEGTA_BoNT))]), by = "Site_id4"]
   
   # add to previous resolved cases
   dupl <- rbind(dupl, dupl_valid)

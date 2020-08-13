@@ -149,7 +149,7 @@ local({
   }
   
   # log2FC
-  df_btx <- fread("temp\\PhPeptInt_BTX.tsv")
+  df_bont <- fread("temp\\PhPeptInt_BoNT.tsv")
   df_caegta <- fread("temp\\PhPeptInt_CaEGTA.tsv")
   
   # annotated domains
@@ -204,7 +204,7 @@ local({
           "Stxbp1")
   
   # all accessions
-  acc <- unique(c(df_caegta$Accession[df_caegta$Gene.name %in% gn], df_btx$Accession[df_btx$Gene.name %in% gn]))
+  acc <- unique(c(df_caegta$Accession[df_caegta$Gene.name %in% gn], df_bont$Accession[df_bont$Gene.name %in% gn]))
   
   # caegta
   pb <- txtProgressBar(min = 1, max = length(acc), char = "*", style = 3)
@@ -221,15 +221,15 @@ local({
     
   }
 
-  # btx
+  # bont
   pb <- txtProgressBar(min = 1, max = length(acc), char = "*", style = 3)
   
   for(i in seq_along(acc)){
     
     setTxtProgressBar(pb, i)
     
-    svglite(paste0("plots\\Lineplots_selected_noLegend\\", df_btx$Gene.name[df_btx$Accession == acc[i]][1], "_", acc[i], "_BTX.svg"), width = 4, height = 3.5)
-    print(lineplotSites(df = df_btx[Accession == acc[i]],
+    svglite(paste0("plots\\Lineplots_selected_noLegend\\", df_bont$Gene.name[df_bont$Accession == acc[i]][1], "_", acc[i], "_BoNT.svg"), width = 4, height = 3.5)
+    print(lineplotSites(df = df_bont[Accession == acc[i]],
                         df_dom = dom[Accession == acc[i]]))
     dev.off()
     

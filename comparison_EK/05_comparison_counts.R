@@ -53,32 +53,32 @@ local({
   take_caegta_01 <- take_caegta_01_1 | take_caegta_01_2 | take_caegta_01_3
   take_caegta_02 <- take_caegta_02_1 | take_caegta_02_2 | take_caegta_02_3
 
-  cnames_BTX_01_1 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_AD_01___1", names(ph_s), value = TRUE)
-  cnames_BTX_01_2 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_AD_01___2", names(ph_s), value = TRUE)
-  cnames_BTX_01_3 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_AD_01___3", names(ph_s), value = TRUE)
+  cnames_BoNT_01_1 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_AD_01___1", names(ph_s), value = TRUE)
+  cnames_BoNT_01_2 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_AD_01___2", names(ph_s), value = TRUE)
+  cnames_BoNT_01_3 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_AD_01___3", names(ph_s), value = TRUE)
 
-  take_BTX_01_1 <- apply(ph_s[, ..cnames_BTX_01_1], 1, function(x) sum(x == 0) < 4)
-  take_BTX_01_2 <- apply(ph_s[, ..cnames_BTX_01_2], 1, function(x) sum(x == 0) < 4)
-  take_BTX_01_3 <- apply(ph_s[, ..cnames_BTX_01_3], 1, function(x) sum(x == 0) < 4)
+  take_BoNT_01_1 <- apply(ph_s[, ..cnames_BoNT_01_1], 1, function(x) sum(x == 0) < 4)
+  take_BoNT_01_2 <- apply(ph_s[, ..cnames_BoNT_01_2], 1, function(x) sum(x == 0) < 4)
+  take_BoNT_01_3 <- apply(ph_s[, ..cnames_BoNT_01_3], 1, function(x) sum(x == 0) < 4)
 
-  cnames_BTX_02_1 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_CB_02___1", names(ph_s), value = TRUE)
-  cnames_BTX_02_2 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_CB_02___2", names(ph_s), value = TRUE)
-  cnames_BTX_02_3 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_CB_02___3", names(ph_s), value = TRUE)
+  cnames_BoNT_02_1 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_CB_02___1", names(ph_s), value = TRUE)
+  cnames_BoNT_02_2 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_CB_02___2", names(ph_s), value = TRUE)
+  cnames_BoNT_02_3 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_CB_02___3", names(ph_s), value = TRUE)
 
-  take_BTX_02_1 <- apply(ph_s[, ..cnames_BTX_02_1], 1, function(x) sum(x == 0) < 4)
-  take_BTX_02_2 <- apply(ph_s[, ..cnames_BTX_02_2], 1, function(x) sum(x == 0) < 4)
-  take_BTX_02_3 <- apply(ph_s[, ..cnames_BTX_02_3], 1, function(x) sum(x == 0) < 4)
+  take_BoNT_02_1 <- apply(ph_s[, ..cnames_BoNT_02_1], 1, function(x) sum(x == 0) < 4)
+  take_BoNT_02_2 <- apply(ph_s[, ..cnames_BoNT_02_2], 1, function(x) sum(x == 0) < 4)
+  take_BoNT_02_3 <- apply(ph_s[, ..cnames_BoNT_02_3], 1, function(x) sum(x == 0) < 4)
 
-  take_BTX_01 <- take_BTX_01_1 | take_BTX_01_2 | take_BTX_01_3
-  take_BTX_02 <- take_BTX_02_1 | take_BTX_02_2 | take_BTX_02_3
+  take_BoNT_01 <- take_BoNT_01_1 | take_BoNT_01_2 | take_BoNT_01_3
+  take_BoNT_02 <- take_BoNT_02_1 | take_BoNT_02_2 | take_BoNT_02_3
 
   sum(take_caegta_01)
   sum(take_caegta_02)
-  sum(take_BTX_01)
-  sum(take_BTX_02)
+  sum(take_BoNT_01)
+  sum(take_BoNT_02)
 
   take_caegta <- take_caegta_01 | take_caegta_02
-  take_all    <- take_BTX_01 | take_BTX_02 | take_caegta_01 | take_caegta_02
+  take_all    <- take_BoNT_01 | take_BoNT_02 | take_caegta_01 | take_caegta_02
 
   sum(take_caegta)
   sum(take_all)
