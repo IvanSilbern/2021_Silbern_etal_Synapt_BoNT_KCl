@@ -9,3 +9,9 @@ Figures/
 external/
 comparison_EK/temp/
 comparison_EK/plots/
+SupplData01_Phosphosite_Intensities.txt
+SupplData02_Proteingroups_Intensities_MockBoNT_AD.txt
+SupplData03_Proteingroups_Intensities_MockBoNT_CB.txt
+SupplData04_Protein_classification.tsv
+SupplTable_1_2_netphorest_group_human_bcgr_fisher.txt
+SupplTable_3_netphorest_group_CaEGTA_MockBoNT_Fisher.txt
