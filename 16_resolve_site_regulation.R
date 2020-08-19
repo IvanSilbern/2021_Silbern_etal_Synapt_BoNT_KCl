@@ -83,7 +83,7 @@ local({
   # keep unresolved cases
   dupl_valid <- dupl_valid[!dupl_valid$Site_id4 %in% temp$Site_id4[temp$Regulation_group != "ambiguous"]]
   
-  # select Regulation_group based on stronges Ca-effect (Cycling-dependent will loose against Ca-dependent or Ca-compensating groups)
+  # select Regulation_group based on strongest Ca-effect (Cycling-dependent will loose against Ca-dependent or Ca-compensating groups)
   dupl_valid[, log2FC.CaEGTA_BoNT := log2FC.CaEGTA - log2FC.BoNT]
   dupl_valid <- dupl_valid[, list(Regulation_group = Regulation_group[which.max(abs(log2FC.CaEGTA_BoNT))]), by = "Site_id4"]
   
