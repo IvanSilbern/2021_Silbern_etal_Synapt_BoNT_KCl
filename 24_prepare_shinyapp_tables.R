@@ -19,7 +19,7 @@ local({
   dat <- fread("temp\\PhPeptIntensities4.tsv")
   
   # mark not significant sites as not regulated
-  dat[!dat$Significance, Regulation_group := "not-regulated"]
+  dat[!dat$Significance, Regulation_group := "not-affected"]
   
   dat <- dat[order(Gene.name, Position)]
   dat <- dat[, Site_id := paste0(Accession, "-", Amino.acid, Position)]
@@ -35,7 +35,7 @@ local({
   
   # select one multiplicity state based on the magnitude of log2FC
   # consider significantly regulated sites first
-  temp <- df[df$Regulation_group_resolved != "not-regulated",
+  temp <- df[df$Regulation_group_resolved != "not-affected",
              list(Amino.acid       = Amino.acid[which(abs(log2FC) == max(abs(log2FC)))],
                   Multiplicity     = Multiplicity[which(abs(log2FC) == max(abs(log2FC)))],
                   log2FC           = log2FC[which(abs(log2FC) == max(abs(log2FC)))],
@@ -44,8 +44,8 @@ local({
                   Norm.intensity   = Norm.intensity[which(abs(log2FC) == max(abs(log2FC)))]
                  ), by = c("Gene.name", "Accession", "Position", "Site_id")]
   
-  # same for not-regulated sites
-  df <- rbind(temp, df[df$Regulation_group_resolved == "not-regulated" & !Site_id %in% temp$Site_id,
+  # same for not-affected sites
+  df <- rbind(temp, df[df$Regulation_group_resolved == "not-affected" & !Site_id %in% temp$Site_id,
                        list(Amino.acid       = Amino.acid[which(abs(log2FC) == max(abs(log2FC)))],
                             Multiplicity     = Multiplicity[which(abs(log2FC) == max(abs(log2FC)))],
                             log2FC           = log2FC[which(abs(log2FC) == max(abs(log2FC)))],
@@ -67,7 +67,7 @@ local({
 
   # select one multiplicity state based on the magnitude of log2FC
   # consider significantly regulated sites first
-  temp <- df[df$Regulation_group_resolved != "not-regulated",
+  temp <- df[df$Regulation_group_resolved != "not-affected",
              list(Amino.acid       = Amino.acid[which(abs(log2FC) == max(abs(log2FC)))],
                   Multiplicity     = Multiplicity[which(abs(log2FC) == max(abs(log2FC)))],
                   log2FC           = log2FC[which(abs(log2FC) == max(abs(log2FC)))],
@@ -76,8 +76,8 @@ local({
                   Norm.intensity   = Norm.intensity[which(abs(log2FC) == max(abs(log2FC)))]
                   ), by = c("Gene.name", "Accession", "Position", "Site_id")]
   
-  # same for not-regulated sites
-  df <- rbind(temp, df[df$Regulation_group_resolved == "not-regulated" & !Site_id %in% temp$Site_id,
+  # same for not-affected sites
+  df <- rbind(temp, df[df$Regulation_group_resolved == "not-affected" & !Site_id %in% temp$Site_id,
                        list(Amino.acid       = Amino.acid[which(abs(log2FC) == max(abs(log2FC)))],
                             Multiplicity     = Multiplicity[which(abs(log2FC) == max(abs(log2FC)))],
                             log2FC           = log2FC[which(abs(log2FC) == max(abs(log2FC)))],
@@ -115,14 +115,14 @@ local({
   names(df)[names(df) == "log2FC.CaEGTA"] <- "log2FC"
   
   # select multiplicity with the highest magnitude
-  temp <- df[df$Regulation_group_resolved != "not-regulated",
+  temp <- df[df$Regulation_group_resolved != "not-affected",
              list(Amino.acid       = Amino.acid[which.max(abs(log2FC))],
                   Multiplicity     = Multiplicity[which.max(abs(log2FC))],
                   log2FC           = log2FC[which.max(abs(log2FC))],
                   Regulation_group = Regulation_group_resolved[which.max(abs(log2FC))]
                   ), by = c("Accession", "Position", "Site_id")]
   
-  df <- rbind(temp, df[df$Regulation_group_resolved == "not-regulated" & !Site_id %in% temp$Site_id,
+  df <- rbind(temp, df[df$Regulation_group_resolved == "not-affected" & !Site_id %in% temp$Site_id,
                        list(Amino.acid       = Amino.acid[which.max(abs(log2FC))],
                             Multiplicity     = Multiplicity[which.max(abs(log2FC))],
                             log2FC           = log2FC[which.max(abs(log2FC))],
@@ -149,14 +149,14 @@ local({
   names(df)[names(df) == "log2FC.BoNT"] <- "log2FC"
   
   # select multiplicity with the highest magnitude
-  temp <- df[df$Regulation_group_resolved != "not-regulated",
+  temp <- df[df$Regulation_group_resolved != "not-affected",
              list(Amino.acid       = Amino.acid[which.max(abs(log2FC))],
                   Multiplicity     = Multiplicity[which.max(abs(log2FC))],
                   log2FC           = log2FC[which.max(abs(log2FC))],
                   Regulation_group = Regulation_group_resolved[which.max(abs(log2FC))]
                   ), by = c("Accession", "Position", "Site_id")]
   
-  df <- rbind(temp, df[df$Regulation_group_resolved == "not-regulated" & !Site_id %in% temp$Site_id,
+  df <- rbind(temp, df[df$Regulation_group_resolved == "not-affected" & !Site_id %in% temp$Site_id,
                        list(Amino.acid       = Amino.acid[which.max(abs(log2FC))],
                             Multiplicity     = Multiplicity[which.max(abs(log2FC))],
                             log2FC           = log2FC[which.max(abs(log2FC))],
@@ -183,14 +183,14 @@ local({
   names(df)[names(df) == "log2FC.CaEGTA_BoNT"] <- "log2FC"
   
   # select multiplicity with the highest magnitude
-  temp <- df[df$Regulation_group_resolved != "not-regulated",
+  temp <- df[df$Regulation_group_resolved != "not-affected",
              list(Amino.acid       = Amino.acid[which.max(abs(log2FC))],
                   Multiplicity     = Multiplicity[which.max(abs(log2FC))],
                   log2FC           = log2FC[which.max(abs(log2FC))],
                   Regulation_group = Regulation_group_resolved[which.max(abs(log2FC))]
             ), by = c("Accession", "Position", "Site_id")]
   
-  df <- rbind(temp, df[df$Regulation_group == "not-regulated" & !Site_id %in% temp$Site_id,
+  df <- rbind(temp, df[df$Regulation_group == "not-affected" & !Site_id %in% temp$Site_id,
                        list(Amino.acid       = Amino.acid[which.max(abs(log2FC))],
                             Multiplicity     = Multiplicity[which.max(abs(log2FC))],
                             log2FC           = log2FC[which.max(abs(log2FC))],

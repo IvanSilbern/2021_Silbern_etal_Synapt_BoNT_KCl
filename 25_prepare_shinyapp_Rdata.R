@@ -49,13 +49,13 @@ local({
   
   # extract gene names
   genes_all <- sort(unique(gn_acc$Gene.name))
-  genes_reg <- sort(unique(gn_acc$Gene.name[gn_acc$Regulation_group != "not-regulated"]))
+  genes_reg <- sort(unique(gn_acc$Gene.name[gn_acc$Regulation_group != "not-affected"]))
   
   # sort accessions
   gn_acc <- gn_acc[, list(Gene.name = Gene.name[1],
                           Protein.description = Protein.description[1],
                           Function = Function[1],
-                          Nr_reg_sites = sum(Regulation_group != "not-regulated")),
+                          Nr_reg_sites = sum(Regulation_group != "not-affected")),
                    by = "Accession"]
   gn_acc <- gn_acc[order(-Nr_reg_sites, Gene.name)]
   

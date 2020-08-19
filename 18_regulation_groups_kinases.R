@@ -10,8 +10,8 @@
 # OUTPUT:
 # "Figures\\Fig_4C\\np_reg_sites_count.txt"
 # "Figures\\Fig_4C\\np_reg_sites_pval.txt"
-# "plots//Fig_NPh_difference_Reg//kinase_reg_group_count.pdf"
-# "plots//Fig_NPh_difference_Reg//kinase_reg_group_pval.pdf"
+# "plots\\Fig_NPh_difference_Reg//kinase_reg_group_count.pdf"
+# "plots\\Fig_NPh_difference_Reg//kinase_reg_group_pval.pdf"
 
 
 
@@ -48,9 +48,6 @@ local({
   
   df <- df[!is.na(netphorest_group2)]
   
-  # too low number of sites for Ca-enhancing group, removed from the analysis
-  df <- df[df$Regulation_group_resolved != "Ca-enhancing"]
-  
   # sites per netphorest group and regulation group
   sites_by_np_reg <- df[,.N, by = c("Regulation_group_resolved", "netphorest_group_high", "netphorest_group2")]
   sites_by_np_reg <- sites_by_np_reg[order(netphorest_group2, Regulation_group_resolved)]
@@ -70,7 +67,7 @@ local({
   sites_by_np_reg <- sites_by_np_reg[max_N >= 10]
   
   # order Regulation groups
-  sites_by_np_reg[, Regulation_group_resolved := factor(Regulation_group_resolved, levels = c("Ca-dependent", "Ca-compensating", "Cycling-dependent"))]
+  sites_by_np_reg[, Regulation_group_resolved := factor(Regulation_group_resolved, levels = c("primary Ca-dependent", "SV-cycling-dependent"))]
   
   # order netphorest groups at the highest level
   np_groups_high <- sites_by_np_reg[, sum(max_N), by = netphorest_group_high]
@@ -103,7 +100,7 @@ local({
   names(test) <- names(list_matr)
   for(i in seq_along(list_matr)){
     
-    test[[i]] <- tryCatch({pairwise.prop.test(list_matr[[i]], p.adjust.method = "none")}, error = function(e) NA)
+    test[[i]] <- tryCatch({fisher.test(list_matr[[i]])}, error = function(e) NA)
     
   }
   
@@ -113,10 +110,7 @@ local({
     
     df_tests <- rbind(df_tests,
                       data.table(netphorest_group2 = names(test)[i],
-                                 comparison = c("Ca-compensating_Ca-dependent",
-                                                "Ca-compensating_Cycling-dependent",
-                                                "Ca-dependent_Ca-dependent",
-                                                "Ca-dependent_Cycling-dependent"),
+                                 comparison = c("primary Ca-dependent vs\nSV-cycling-dependent"),
                                  p.val = as.numeric(test[[i]]$p.value))
     )
     
@@ -126,15 +120,10 @@ local({
   # BH correction
   df_tests[, p.adj := p.adjust(p.val, "BH")]
   
-  # order "comparisons"
-  df_tests[, comparison := gsub("_", " vs\n", comparison)]
-  df_tests[, comparison := factor(comparison, levels = c("Ca-dependent vs\nCycling-dependent", "Ca-compensating vs\nCa-dependent", "Ca-compensating vs\nCycling-dependent"))]
-  
   # order np groups
   df_tests[, netphorest_group2 := factor(netphorest_group2, levels = np_groups_ordered)]
   
-  df_tests[df_tests$p.adj < 0.05]
-  
+  df_tests[df_tests$p.adj < 0.10]
   
   # provide figure source
   fwrite(sites_by_np_reg, "Figures\\Fig_4C\\np_reg_sites_count.txt", sep = "\t")
@@ -143,18 +132,18 @@ local({
   ##### plots #####  
   
   pdf("plots\\kinase_reg_group_count.pdf", width = 8, height = 10)
+  
   g <- ggplot(sites_by_np_reg, aes(Regulation_group_resolved, netphorest_group2))
   
   g <- g + geom_tile(aes(fill = N_per), color = "white", size = 1)
   g <- g + coord_equal()
   g <- g + geom_text(aes(label = paste0(round(N_per, 1), "%\n(", N, ")")), color = "grey40")
-  g <- g + annotate("text", x = c(1, 2, 3), y = c(0.5, 0.5, 0.5), label = c("", "", ""))
-  g <- g + annotate("text", x = c(1, 2, 3), y = c(0.95, 0.95, 0.95),
-                    label = c(sites_by_np_reg$Total[sites_by_np_reg$Regulation_group_resolved == "Ca-dependent"][1],
-                              sites_by_np_reg$Total[sites_by_np_reg$Regulation_group_resolved == "Ca-compensating"][1],
-                              sites_by_np_reg$Total[sites_by_np_reg$Regulation_group_resolved == "Cycling-dependent"][1]),
+  g <- g + annotate("text", x = c(1, 2), y = c(0.5, 0.5), label = c("", ""))
+  g <- g + annotate("text", x = c(1, 2), y = c(0.95, 0.95),
+                    label = c(sites_by_np_reg$Total[sites_by_np_reg$Regulation_group_resolved == "primary Ca-dependent"][1],
+                              sites_by_np_reg$Total[sites_by_np_reg$Regulation_group_resolved == "SV-cycling-dependent"][1]),
                     fontface = "bold")
-  g <- g + annotate("segment", x = 0.5, xend = 3.5, y = 1.4, yend = 1.4, color = "black", size = 1.5)
+  g <- g + annotate("segment", x = 0.5, xend = 2.5, y = 1.4, yend = 1.4, color = "black", size = 1.5)
   g <- g + scale_fill_gradient(high = "#fcb533", low = "#ebf7e9", na.value = "white", limits = c(0, 30), oob = scales::squish)
   g <- g + scale_x_discrete(expand = c(0, 0), position = "top", breaks = levels(sites_by_np_reg$Regulation_group_resolved))
   g <- g + scale_y_discrete(expand = c(0, 0), limits = rev(c(levels(sites_by_np_reg$netphorest_group2), "Total")))
@@ -171,11 +160,12 @@ local({
   g <- g + xlab("") + ylab("")
   g <- g + guides(fill = guide_colorbar(title = "% Sites"))
   print(g)
+  
   dev.off()
   
   pdf("plots\\kinase_reg_group_pval.pdf", width = 8, height = 10)
-  g <- ggplot(df_tests, aes(comparison, netphorest_group2))
   
+  g <- ggplot(df_tests, aes(comparison, netphorest_group2))
   g <- g + geom_tile(aes(fill = p.adj), color = "white", size = 1)
   g <- g + coord_equal()
   g <- g + geom_text(aes(label = round(p.adj, 3)), color = "grey40")
@@ -195,6 +185,6 @@ local({
   g <- g + xlab("") + ylab("")
   g <- g + guides(fill = guide_colorbar(title = "adj. p-Value"))
   print(g)
-  dev.off()
   
+  dev.off()
 })

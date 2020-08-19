@@ -78,21 +78,15 @@ local({
     g <- ggplot(df, aes(x = Position, y = value, group = Siteid, label = Siteid, col = Regulation_group))
     g <- g + scale_x_continuous(limits = c(1, plen))
     g <- g + scale_y_continuous(limits = c(-y_limit, y_limit))
-    g <- g + scale_color_manual(breaks = c("Ca-compensating",
-                                           "Ca-dependent",
-                                           "Ca-enhancing",
-                                           "Cycling-dependent",
-                                           "not-regulated"),
-                                values = c("Ca-compensating"   = "#66c837",  # green  #abc837
-                                           "Ca-dependent"      = "#ffa655",  # yellow #ffdd55
-                                           "Ca-enhancing"      = "#ff7469",  # salmon #ff8c69
-                                           "Cycling-dependent" = "#31a9ff",  # cyan   #aaeeff
-                                           "not-regulated"     = scales::alpha("black", 0.6)),
-                                labels = c("Ca-compensating",
-                                           "Ca-dependent",
-                                           "Ca-enhancing",
-                                           "Cycling-dependent",
-                                           "not-regulated"),
+    g <- g + scale_color_manual(breaks = c("primary Ca-dependent",
+                                           "SV-cycling-dependent",
+                                           "not-affected"),
+                                values = c("primary Ca-dependent" = "#fcb533",  # yellow #ffdd55
+                                           "SV-cycling-dependent" = "#51baf4",  # cyan   #aaeeff
+                                           "not-affected"     = scales::alpha("black", 0.6)),
+                                labels = c("primary Ca-dependent",
+                                           "SV-cycling-dependent",
+                                           "not-affected"),
                                 name = "")
     # g <- g + geom_segment(x = 1, xend = plen,
     #                       y = 0, yend = 0,
@@ -166,7 +160,7 @@ local({
   df_caegta <- df_caegta[order(Gene.name)]
   
   # all accessions
-  acc <- unique(df_caegta$Accession[df_caegta$Regulation_group != "not-regulated"])
+  acc <- unique(df_caegta$Accession[df_caegta$Regulation_group != "not-affected"])
   length(acc)
   
   # caegta
@@ -200,7 +194,7 @@ local({
   # sort by gene name
   df_bont <- df_bont[order(Gene.name)]
   
-  acc <- unique(df_bont$Accession[df_bont$Regulation_group != "not-regulated"])
+  acc <- unique(df_bont$Accession[df_bont$Regulation_group != "not-affected"])
   length(acc)
   
   # bont

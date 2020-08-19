@@ -77,42 +77,31 @@ local({
   
   # distribute sites in different regulation groups
   fc_cut <- log2(1.2)
+  
   # not regulated
-  ph_cand[(log2FC.CaEGTA_BoNT <  fc_cut & log2FC.CaEGTA_BoNT > -fc_cut) & (log2FC.BoNT <  fc_cut & log2FC.BoNT > -fc_cut), Regulation_group := "not-regulated"]
-  # cycling-dependent
-  ph_cand[(log2FC.CaEGTA_BoNT <  fc_cut & log2FC.CaEGTA_BoNT > -fc_cut) & (log2FC.BoNT >  fc_cut), Regulation_group := "Cycling-dependent"]
-  ph_cand[(log2FC.CaEGTA_BoNT <  fc_cut & log2FC.CaEGTA_BoNT > -fc_cut) & (log2FC.BoNT < -fc_cut), Regulation_group := "Cycling-dependent"]
-  # Ca-compensating
-  ph_cand[(log2FC.CaEGTA_BoNT < -fc_cut) & (log2FC.BoNT >  fc_cut), Regulation_group := "Ca-compensating"]
-  ph_cand[(log2FC.CaEGTA_BoNT >  fc_cut) & (log2FC.BoNT < -fc_cut), Regulation_group := "Ca-compensating"]
-  # Ca-enhancing
-  ph_cand[(log2FC.CaEGTA_BoNT >  fc_cut) & (log2FC.BoNT >  fc_cut), Regulation_group := "Ca-enhancing"]
-  ph_cand[(log2FC.CaEGTA_BoNT < -fc_cut) & (log2FC.BoNT < -fc_cut), Regulation_group := "Ca-enhancing"]
+  ph_cand[, Regulation_group := "not-affected"]
+  
   # Ca-dependent
-  ph_cand[(log2FC.CaEGTA_BoNT >  fc_cut) & (log2FC.BoNT <  fc_cut & log2FC.BoNT > -fc_cut), Regulation_group := "Ca-dependent"]
-  ph_cand[(log2FC.CaEGTA_BoNT < -fc_cut) & (log2FC.BoNT <  fc_cut & log2FC.BoNT > -fc_cut), Regulation_group := "Ca-dependent"]
+  ph_cand[abs(log2FC.CaEGTA) >  fc_cut & abs(log2FC.BoNT) <  fc_cut, Regulation_group := "primary Ca-dependent"]
   
-  # direction
-  ph_cand[log2FC.CaEGTA_BoNT >  fc_cut, Regulation_direction := "pos"]
-  ph_cand[log2FC.CaEGTA_BoNT < -fc_cut, Regulation_direction := "neg"]
-  ph_cand[Regulation_group == "Cycling-dependent" & log2FC.BoNT >  fc_cut, Regulation_direction := "pos"]
-  ph_cand[Regulation_group == "Cycling-dependent" & log2FC.BoNT < -fc_cut, Regulation_direction := "neg"]
-
+  # SV-cycling-dependent
+  ph_cand[abs(log2FC.BoNT) > fc_cut, Regulation_group := "SV-cycling-dependent"]
+  
   # plot
+  ph_cand[, Regulation_group := factor(Regulation_group, levels = c("primary Ca-dependent", "SV-cycling-dependent", "not-affected"))]
   
+  coord_min <- min(c(ph_cand$log2FC.CaEGTA, ph_cand$log2FC.BoNT), na.rm = TRUE)
+  coord_max <- max(c(ph_cand$log2FC.CaEGTA, ph_cand$log2FC.BoNT), na.rm = TRUE)
   
-  ph_cand[, Regulation_group := factor(Regulation_group, levels = c("Ca-dependent", "Ca-compensating", "Ca-enhancing", "Cycling-dependent", "not-regulated"))]
-  
-  lm_mod <- lm(data= ph_cand, log2FC.CaEGTA_BoNT ~ log2FC.BoNT)
-  pdf("plots\\Ca_vs_BoNT_all.pdf", width = 10 , height = 7)
-  g <- ggplot(ph_cand, aes(x = log2FC.BoNT, y = log2FC.CaEGTA_BoNT, color = Regulation_group))
+  pdf("plots\\CaEGTA_vs_MockBoNT_all.pdf", width = 10 , height = 7)
+  g <- ggplot(ph_cand, aes(x = log2FC.BoNT, y = log2FC.CaEGTA, color = Regulation_group))
   g <- g + geom_point(alpha = 0.4)
-  g <- g + scale_color_manual(values = c("#ffa555", "#66c837", "#ff7369", "#30a8ff", "grey"))
-  g <- g + geom_abline(slope = lm_mod$coefficients[2], intercept = lm_mod$coefficients[1], color = "steelblue", linetype = "dashed")
-  g <- g + xlab("log2 (Mock / BoNT)") + ylab("log2 (Ca / EGTA) - log2 (Mock / BoNT)")
-  g <- g + annotate("text", y = 2.25, x = 1.2, color = "steelblue", label = lm_eqn(lm_mod), parse = TRUE, size = 7)
+  g <- g + coord_equal(xlim = c(coord_min, coord_max), ylim = c(coord_min, coord_max))
+  g <- g + scale_color_manual(values = c("#fcb533", "#51baf4", "grey"))
+  g <- g + xlab("log2 (Mock / BoNT)") + ylab("log2 (Ca / EGTA)")
   g <- g + guides(color = guide_legend(override.aes = list(alpha = 1, size = 4), title = "Regulation Group"))
-  g <- g + stat_smooth(color = "darkgrey", method = "lm", linetype = "dotted", se = FALSE)
+  g <- g + geom_hline(yintercept = log2(c(1.2, 1/1.2)), color = "darkred", linetype = "dashed")
+  g <- g + geom_vline(xintercept = log2(c(1.2, 1/1.2)), color = "darkred", linetype = "dashed")
   g <- g + theme_bw()
   g <- g + theme(axis.text = element_text(size = 18),
                  axis.title = element_text(size = 20),
@@ -131,17 +120,13 @@ local({
          "Figures\\Fig_4A\\Calcium_vs_Cycling_all.txt", sep = "\t")
   
 
-  # Cycling-dependent group should show q.val.BoNT < 0.01
-  # Ca-dependent group should show q.val.CaEGTA < 0.01
-  # Ca-compensating or Ca-enhancing group should show q.val < 0.01 in either CaEGTA or BoNT
+  # SV-Cycling-dependent group should show q.val.BoNT < 0.01
+  # primary Ca-dependent group should show q.val.CaEGTA < 0.01
   
-  dim(ph_cand)
   ph_cand <- ph_cand[ph_cand$Regulation_group != "not-regulated"]
   
-  list_cand <- list(Cycling_dependent = ph_cand[ph_cand$Regulation_group == "Cycling-dependent" & q.val.BoNT < 0.01],
-                    Ca_dependent = ph_cand[ph_cand$Regulation_group == "Ca-dependent" & q.val.CaEGTA < 0.01],
-                    Ca_compensating = ph_cand[ph_cand$Regulation_group == "Ca-compensating" & (q.val.CaEGTA < 0.01 | q.val.BoNT < 0.01)],
-                    Ca_enhancing = ph_cand[ph_cand$Regulation_group == "Ca-enhancing" & (q.val.CaEGTA < 0.01 | q.val.BoNT < 0.01)])
+  list_cand <- list(Cycling_dependent = ph_cand[ph_cand$Regulation_group == "SV-cycling-dependent" & (q.val.BoNT < 0.01 | Candidate.CaEGTA)],
+                    Ca_dependent = ph_cand[ph_cand$Regulation_group == "primary Ca-dependent" & q.val.CaEGTA < 0.01])
   lapply(list_cand, nrow)
   
   for(i in seq_along(list_cand)){
@@ -155,26 +140,31 @@ local({
 
   
   # Ca-dependent if signifcantly regulated in CaEGTA but not found in BoNT experiment
-  ph[which(ph$Candidate.CaEGTA & is.na(ph$Candidate.BoNT)), Regulation_group := "Ca-dependent"]
-  ph[ph$Regulation_group == "Ca-dependent" & ph$log2FC.CaEGTA > 0, Regulation_direction := "pos"]
-  ph[ph$Regulation_group == "Ca-dependent" & ph$log2FC.CaEGTA < 0, Regulation_direction := "neg"]
-
+  ph[which(ph$Candidate.CaEGTA & is.na(ph$Candidate.BoNT)), Regulation_group := "primary Ca-dependent"]
+  
   # Cycling-dependent if signifcantly regulated in BoNT experiment but not found in CaEGTA experiment
-  ph[which(ph$Candidate.BoNT & is.na(ph$Candidate.CaEGTA)), Regulation_group := "Cycling-dependent"]
-  ph[ph$Regulation_group == "Cycling-dependent" & ph$log2FC.BoNT > 0, Regulation_direction := "pos"]
-  ph[ph$Regulation_group == "Cycling-dependent" & ph$log2FC.BoNT < 0, Regulation_direction := "neg"]
-
+  ph[which(ph$Candidate.BoNT & is.na(ph$Candidate.CaEGTA)), Regulation_group := "SV-cycling-dependent"]
   
   ph_cand <- rbind(ph_cand, ph[which(ph$Candidate.CaEGTA & is.na(ph$Candidate.BoNT))])
   ph_cand <- rbind(ph_cand, ph[which(ph$Candidate.BoNT & is.na(ph$Candidate.CaEGTA))])
-
+  dim(ph_cand)
+  table(ph_cand$Regulation_group)
+  
   pdf("plots\\Ca_vs_BoNT_sign.pdf", width = 10 , height = 8)
-  g <- ggplot(ph_cand, aes(x = log2FC.BoNT, y = log2FC.CaEGTA_BoNT, color = Regulation_group))
+  g <- ggplot(ph_cand, aes(x = log2FC.BoNT, y = log2FC.CaEGTA, color = Regulation_group))
   g <- g + geom_point(alpha = 0.4)
-  g <- g + scale_color_manual(values = c("gold", "green3", "salmon", "steelblue", "grey"))
-  g <- g + geom_abline(slope = lm_mod$coefficients[2], intercept = lm_mod$coefficients[1], color = "steelblue", linetype = "dashed")
-  g <- g + xlab("log2FC.BoNT") + ylab("log2FC.CaEGTA - log2FC.BoNT")
-  g <- g + annotate("text", y = 2.25, x = 2, color = "steelblue", label = lm_eqn(lm_mod), parse = TRUE)
+  g <- g + coord_equal(xlim = c(coord_min, coord_max), ylim = c(coord_min, coord_max))
+  g <- g + scale_color_manual(values = c("#fcb533", "#51baf4ff", "grey"))
+  g <- g + xlab("log2FC (Mock / BoNT)") + ylab("log2FC (Ca / EGTA)")
+  g <- g + geom_hline(yintercept = log2(c(1.2, 1/1.2)), color = "darkred", linetype = "dashed")
+  g <- g + geom_vline(xintercept = log2(c(1.2, 1/1.2)), color = "darkred", linetype = "dashed")
+  g <- g + guides(color = guide_legend(override.aes = list(alpha = 1, size = 4), title = "Regulation Group"))
+  g <- g + theme_bw()
+  g <- g + theme(axis.text = element_text(size = 18),
+                 axis.title = element_text(size = 20),
+                 legend.text = element_text(size = 20),
+                 legend.title = element_text(size = 20),
+                 legend.key.size = unit(1.5, "cm"))
   print(g)
   dev.off()
 
@@ -187,14 +177,10 @@ local({
   
   unique(ph_cand$Regulation_group)
 
-  prot_groups_count <- ph_cand[, list(Ca_dependent = sum(Regulation_group == "Ca-dependent"),
-                                      Ca_compensating = sum(Regulation_group == "Ca-compensating"),
-                                      Ca_enhancing = sum(Regulation_group == "Ca-enhancing"),
-                                      Cycling_dependent = sum(Regulation_group == "Cycling-dependent")), by = Gene.name]
+  prot_groups_count <- ph_cand[, list(Ca_dependent = sum(Regulation_group == "primary Ca-dependent"),
+                                      Cycling_dependent = sum(Regulation_group == "SV-cycling-dependent")), by = Gene.name]
   prot_groups_per <- prot_groups_count[, lapply(.SD, function(x) 100*x/sum(apply(.SD, 1, sum))),
                                        by = Gene.name, .SDcols = c("Ca_dependent",
-                                                                   "Ca_compensating",
-                                                                   "Ca_enhancing",
                                                                    "Cycling_dependent")]
   fwrite(prot_groups_count, "temp\\Gene_RegulationGroups_count.tsv", sep = "\t")
   fwrite(prot_groups_per, "temp\\Gene_RegulationGroups_per.tsv", sep = "\t")
