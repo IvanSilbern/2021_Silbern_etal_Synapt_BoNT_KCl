@@ -8,8 +8,8 @@
 # "temp\\Domains.tsv"
 
 # OUTPUT:
-# "SupplData5_Phosphoproteins_regulated_CaEGTA.pdf"
-# "SupplData6_Phosphoproteins_regulated_MockBoNT.pdf"
+# "SupplData05_Phosphoproteins_regulated_CaEGTA.pdf"
+# "SupplData06_Phosphoproteins_regulated_MockBoNT.pdf"
 
 local({
   

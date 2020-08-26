@@ -8,7 +8,7 @@
 # "temp\\PhPeptIntensities_slim.tsv"
 
 # OUTPUT:
-# "Figures\\SupplFig_6\\Ph_events_netphorest.txt"
+# "Figures\\SupplFig_5\\Ph_events_netphorest.txt"
 # "Figures\\Fig_2EF\\Ph_events_netphorest.txt"
 # "plots\\NetphorestGroups_Count_CaEGTA.pdf"
 # "plots\\NetphorestGroups_Count_BoNT.pdf"
@@ -18,7 +18,7 @@
 local({
   
   if(!dir.exists("plots")) dir.create("plots")
-  if(!dir.exists("Figures\\SupplFig_6")) dir.create("Figures\\SupplFig_6", recursive = TRUE)
+  if(!dir.exists("Figures\\SupplFig_5")) dir.create("Figures\\SupplFig_5", recursive = TRUE)
   if(!dir.exists("Figures\\Fig_2EF")) dir.create("Figures\\Fig_2EF", recursive = TRUE)
   
   library(data.table)
@@ -32,7 +32,7 @@ local({
                 "Amino.acid", "Position", "Multiplicity",
                 "q.val.CaEGTA", "log2FC.CaEGTA", "Candidate.CaEGTA",
                 "q.val.BoNT", "log2FC.BoNT", "Candidate.BoNT", "netphorest_group")],
-         "Figures\\SupplFig_6\\Ph_events_netphorest.txt",
+         "Figures\\SupplFig_5\\Ph_events_netphorest.txt",
          sep = "\t")
   
   fwrite(ph[, c("id", "Gene.name", "Accession",

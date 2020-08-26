@@ -16,7 +16,7 @@ local({
   g <- ggplot(df, aes(y = counts, x = Localization_prob, fill = Localization_prob))
   g <- g + facet_grid(~Experiment)
   g <- g + geom_col(alpha = 0.8)
-  g <- g + scale_fill_manual(values = c("lightblue", "orange"))
+  g <- g + scale_fill_manual(values = c("#51baf4", "orange"))
   g <- g + scale_y_continuous(expand = c(0.01, 0.1))
   g <- g + ylab("Number of quantified Phosphorylation sites\n") + xlab ("")
   g <- g + theme_bw()

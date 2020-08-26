@@ -42,7 +42,8 @@ local({
                               sites_by_np_reg$Total[sites_by_np_reg$Regulation_group_resolved == "SV-cycling-dependent"][1]),
                     fontface = "bold")
   g <- g + annotate("segment", x = 0.5, xend = 2.5, y = 1.4, yend = 1.4, color = "black", size = 1.5)
-  g <- g + scale_fill_gradient(high = "#fcb533", low = "#ebf7e9", na.value = "white", limits = c(0, 30), oob = scales::squish)
+  #g <- g + scale_fill_gradient(high = "#fcb533", low = "#ebf7e9", na.value = "white", limits = c(0, 30), oob = scales::squish)
+  g <- g + scale_fill_gradient(high = "#eeaaff", low = "#ebf7e9", na.value = "white", limits = c(0, 30), oob = scales::squish)
   g <- g + scale_x_discrete(expand = c(0, 0), position = "top", breaks = levels(sites_by_np_reg$Regulation_group_resolved))
   g <- g + scale_y_discrete(expand = c(0, 0), limits = rev(c(levels(sites_by_np_reg$netphorest_group2), "Total")))
   g <- g + theme(plot.margin = unit(c(3,3,3,3), "cm"),
@@ -67,7 +68,8 @@ local({
   g <- g + geom_tile(aes(fill = p.adj), color = "white", size = 1)
   g <- g + coord_equal()
   g <- g + geom_text(aes(label = round(p.adj, 3)), color = "grey40")
-  g <- g + scale_fill_gradient(low = "#51baf4", high = "#ebf7e9", na.value = "white", limits = c(0, 0.2), oob = scales::squish)
+  #g <- g + scale_fill_gradient(low = "#51baf4", high = "#ebf7e9", na.value = "white", limits = c(0, 0.2), oob = scales::squish)
+  g <- g + scale_fill_gradient(low = "#aad400", high = "#ebf7e9", na.value = "white", limits = c(0, 0.2), oob = scales::squish)
   g <- g + scale_x_discrete(expand = c(0, 0), position = "top", breaks = levels(df_tests$comparison))
   g <- g + scale_y_discrete(expand = c(0, 0), limits = rev(levels(df_tests$netphorest_group2)))
   g <- g + theme(plot.margin = unit(c(3,3,3,3), "cm"),

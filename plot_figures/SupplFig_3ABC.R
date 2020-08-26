@@ -3,8 +3,9 @@ local({
   library(data.table)
   library(ggplot2)
   
-  temp <- fread("Figures\\SupplFig_4DEF\\ProteinGroups_MockBoNT_CB.txt")
+  temp <- fread("Figures\\SupplFig_3ABC\\ProteinGroups_MockBoNT_AD.txt")
   temp_sub <- temp[Gene.name %in% c("Vamp2", "Stx1a", "Snap25", "Actb")]
+  
   int_cols_norm <- c("Mock_01.norm", "Mock_02.norm", "Mock_03.norm",
                      "BoNT_01.norm", "BoNT_02.norm", "BoNT_03.norm")
   temp_sub <- melt(temp_sub[, c("Gene.name", ..int_cols_norm)], measure.vars = int_cols_norm)
@@ -12,11 +13,11 @@ local({
   temp_sub[, variable := factor(variable, levels = c("Mock_01", "Mock_02", "Mock_03", "BoNT_01", "BoNT_02", "BoNT_03"))]
   
   
-  pdf("Figures\\SupplFig_4DEF\\SupplFig_4D.pdf")
+  pdf("Figures\\SupplFig_3ABC\\SupplFig_3A.pdf")
   boxplot(temp[, c("Mock_01", "Mock_02", "Mock_03", "BoNT_01", "BoNT_02", "BoNT_03")])
   dev.off()
   
-  pdf("Figures\\SupplFig_4DEF\\SupplFig_4E.pdf")
+  pdf("Figures\\SupplFig_3ABC\\SupplFig_3B.pdf")
   plot(y = -log10(temp$p.mod),
        x = temp$log2FC,
        type = "n",
@@ -38,7 +39,7 @@ local({
   
   dev.off()
   
-  pdf("Figures\\SupplFig_4DEF\\SupplFig_4F.pdf", width = 6, height = 4)
+  pdf("Figures\\SupplFig_3ABC\\SupplFig_3C.pdf", width = 6, height = 4)
   g <- ggplot(temp_sub, aes(x = variable, y = value, group = Gene.name, color = Gene.name))
   g <- g + geom_line()
   g <- g + geom_point()

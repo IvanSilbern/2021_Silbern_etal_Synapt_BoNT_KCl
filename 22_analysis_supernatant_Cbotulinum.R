@@ -8,12 +8,12 @@
 
 # OUTPUT:
 # "plots\\supernatants_Cbotulinum_proteins_ranked_first30.pdf"
-# "Figures\\SupplFig_3\\Proteingroup_Intensity_Suprenatants_Cbotulinum.txt"
+# "Figures\\SupplFig_2\\Proteingroup_Intensity_Suprenatants_Cbotulinum.txt"
 
 
 local({
 
-  if(!dir.exists("Figures\\SupplFig_3\\")) dir.create("Figures\\SupplFig_3\\", recursive = TRUE)
+  if(!dir.exists("Figures\\SupplFig_2\\")) dir.create("Figures\\SupplFig_2\\", recursive = TRUE)
   if(!dir.exists("plots")) dir.create("plots")
   
   library(ggplot2)
@@ -62,6 +62,6 @@ local({
   dev.off()
   
   # provide source data
-  fwrite(df_long, "Figures\\SupplFig_3\\Proteingroup_Intensity_Suprenatants_Cbotulinum.txt", sep = "\t")
+  fwrite(df_long, "Figures\\SupplFig_2\\Proteingroup_Intensity_Suprenatants_Cbotulinum.txt", sep = "\t")
   
 })

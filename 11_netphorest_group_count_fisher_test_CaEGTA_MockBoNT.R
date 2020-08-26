@@ -7,9 +7,11 @@
 # "temp\\PhPeptIntensities_slim.tsv"
 #
 # OUTPUT:
-# "SupplTable_3_netphorest_group_CaEGTA_MockBoNT_Fisher.txt"
+# "Tables\\SupplTable_3_netphorest_group_CaEGTA_MockBoNT_Fisher.txt"
 
 local({
+  
+  if(!dir.exists("Tables")) dir.create("Tables")
   
   library(data.table)
   
@@ -69,7 +71,7 @@ local({
   count <- count[, c("netphorest_group2", "N.Ca", "All.Ca", "N.BoNT", "All.BoNT", "p.val", "p.adj.BH")]
   names(count) <- c("Kinase group", "CaEGTA", "Total CaEGTA", "MockBoNT", "Total MockBoNT", "p.val", "p.adj")
 
-  fwrite(count, "SupplTable_3_netphorest_group_CaEGTA_MockBoNT_Fisher.txt", sep = "\t")
+  fwrite(count, "Tables\\SupplTable_3_netphorest_group_CaEGTA_MockBoNT_Fisher.txt", sep = "\t")
   
 })
 

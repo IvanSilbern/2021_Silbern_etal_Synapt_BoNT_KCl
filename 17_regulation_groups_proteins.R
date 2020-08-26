@@ -13,13 +13,15 @@
 #
 
 # OUTPUT:
-# "plots//circle_prot_grouped.pdf"
-# "Figures\\Fig_4B\\Gene_RegulationGroups.txt"
-# "Gene_RegulationGroups.tsv"
+# "plots\\circle_prot_grouped.pdf"
+# "Figures\\Fig_4B\\Gene_RegulationGroups.tsv"
+# "temp\\Protein_classification.txt"
+# "SupplData\\SupplData04_Protein_classification.txt"
 
 local({
   
   if(!dir.exists("Figures\\Fig_4B")) dir.create("Figures\\Fig_4B", recursive = TRUE)
+  if(!dir.exists("SupplData")) dir.create("SupplData")
   
   library(data.table)
   library(stringr)
@@ -27,7 +29,7 @@ local({
   
   # minimal percentage of the sites belonging to the same regulation group
   # to consider the protein being mostly regulated the same way
-  min_per <- 75
+  min_per <- 60
   
   df <- fread("temp\\PhPeptIntensities4.tsv")
   dim(df)
@@ -37,7 +39,7 @@ local({
   
   # remove duplicates due to several multiplicity-states
   df <- df[!duplicated(df$Site_id4), c("Site_id4", "Accession", "Accession.noIso", "Stringid", "REVIEWED",
-                                       "Gene.name", "Protein.description", "Regulation_group_resolved", "Function")]
+                                       "Gene.name", "Protein.description", "Regulation_group_resolved", "Function", "Keyword_manual")]
   
   prot_groups_count <- df[, list(Ca_dependent = sum(Regulation_group_resolved == "primary Ca-dependent"),
                                  Cycling_dependent = sum(Regulation_group_resolved == "SV-cycling-dependent")), by = Gene.name]
@@ -47,7 +49,7 @@ local({
   prot_groups_count <- merge(prot_groups_count, prot_groups_per, by = "Gene.name", suffixes = c("", "_per"))
   
   prot_groups_count <- merge(prot_groups_count, df[, c("Gene.name", "Accession",
-                                                        "Accession.noIso", "Protein.description", "Stringid", "REVIEWED", "Function")],
+                                                        "Accession.noIso", "Protein.description", "Stringid", "REVIEWED", "Function", "Keyword_manual")],
                              by = "Gene.name", all.x = TRUE)
   prot_groups_count <- prot_groups_count[order(REVIEWED)]
   prot_groups_count <- prot_groups_count[!duplicated(Gene.name)]
@@ -97,8 +99,10 @@ local({
   
   dev.off()
   
+  
   # write tables
-  fwrite(prot_groups_count, "SupplData04_Protein_classification.tsv", sep = "\t")
+  fwrite(prot_groups_count, "temp\\Protein_classification.tsv", sep = "\t")
+  fwrite(prot_groups_count[, -c("Accession.noIso", "Stringid")], "SupplData\\SupplData04_Protein_classification.txt", sep = "\t")
   fwrite(prot_groups_count, "Figures\\Fig_4B\\Gene_RegulationGroups.txt", sep = "\t")
   
 })

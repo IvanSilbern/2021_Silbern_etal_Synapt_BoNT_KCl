@@ -6,7 +6,12 @@
 # "search_results\Synapt_Ph\combined\txt\Phospho (STY)Sites.txt"
 # "temp\\PhPeptIntensities4.tsv"
 
+# OUTPUT:
+# "SupplData\\SupplData01_Phosphosite_Intensities.txt"
+
 local({
+  
+  if(!dir.exists("SupplData")) dir.create("SupplData")
   
   library(data.table)
   library(stringr)
@@ -113,7 +118,7 @@ local({
   names(df_sub)[names(df_sub) == "log2FC.CaEGTA_BoNT"] <- "log2FC.CaEGTA_MockBoNT"  
   
   df_sub[, Site_id := paste0(Accession, "_", Amino.acid, Position, "_", Multiplicity)]
-  fwrite(df_sub, "SupplData01_Phosphosite_Intensities.txt", sep = "\t")
+  fwrite(df_sub, "SupplData\\SupplData01_Phosphosite_Intensities.txt", sep = "\t")
   
   })
   

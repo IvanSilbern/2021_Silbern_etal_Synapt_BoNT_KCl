@@ -10,12 +10,12 @@
 # "plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BoNT_UT.pdf"
 # "plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_BoNT_Mock.pdf"
 # "plots\\Test_HeLA_PhSites_volcano_qVal_log2FC_Mock_UT.pdf"
-# "Figures\\SupplFig_5\\ProteinGroups_HeLa_PhSites_Contrasts.tsv"
+# "Figures\\SupplFig_4\\ProteinGroups_HeLa_PhSites_Contrasts.tsv"
 
 
 local({
         
-        if(!dir.exists("Figures\\SupplFig_5")) dir.create("Figures\\SupplFig_5", recursive = TRUE)
+        if(!dir.exists("Figures\\SupplFig_4")) dir.create("Figures\\SupplFig_4", recursive = TRUE)
                 
         library(data.table)
         library(stringr)
@@ -224,6 +224,6 @@ local({
         temp[, Protein.name := str_match(Fasta.headers, "\\s(.*?)\\sOS=")[,2]]
         
         
-        fwrite(temp, "Figures\\SupplFig_5\\ProteinGroups_HeLa_PhSites_Contrasts.txt", sep = "\t")
+        fwrite(temp, "Figures\\SupplFig_4\\ProteinGroups_HeLa_PhSites_Contrasts.txt", sep = "\t")
 
 })

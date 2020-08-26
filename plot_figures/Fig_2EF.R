@@ -115,7 +115,7 @@ local({
   
   g <- ggplot(ph_Ca, aes(x = netphorest_group2))
   g <- g + geom_bar(aes(fill = Regulation))
-  g <- g + scale_fill_manual(breaks = c("Up", "Down"), values = c("lightblue", "orange"))
+  g <- g + scale_fill_manual(breaks = c("Up", "Down"), values = c("#51baf4", "orange"))
   g <- g + scale_y_continuous(expand = c(0, 1), limits = c(-x_side, max_y_limit))
   g <- g + scale_x_discrete(labels = npgroup_count_high_Ca$netphorest_group2)
   g <- g + coord_flip()
@@ -173,7 +173,7 @@ local({
   
   g <- ggplot(ph_BoNT[ph_BoNT$netphorest_group2 != ""], aes(x = netphorest_group2))
   g <- g + geom_bar(aes(fill = Regulation))
-  g <- g + scale_fill_manual(breaks = c("Up", "Down"), values = c("lightblue", "orange"))
+  g <- g + scale_fill_manual(breaks = c("Up", "Down"), values = c("#51baf4", "orange"))
   g <- g + scale_y_continuous(expand = c(0, 1), limits = c(-x_side, max_y_limit))
   g <- g + scale_x_discrete(labels = npgroup_count_high_BoNT$netphorest_group2)
   g <- g + coord_flip()

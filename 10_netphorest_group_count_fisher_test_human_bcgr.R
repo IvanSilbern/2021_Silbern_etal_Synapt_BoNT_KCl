@@ -8,10 +8,12 @@
 # "external\\data_NetworKIN\\networkin_human_predictions_3.1.tsv.bz2"
 
 # OUTPUT:
-# "SupplTable_1_2_netphorest_group_human_bcgr_fisher.txt"
+# "Tables\\SupplTable_1_2_netphorest_group_human_bcgr_fisher.txt"
 
 
 local({ 
+  
+  if(!dir.exists("Tables")) dir.create("Tables")
   
   library(data.table)
   
@@ -190,6 +192,6 @@ local({
   df <- df[, c("netphorest_group2", "N_count", "Out", "In_all", "Out_all", "p.val", "p.adj", "Experiment")]
   names(df) <- c("Kinase group", "Sites in", "Sites out", "Sites in bcgr", "Sites out bcgr", "p.val", "p.adj", "Experiment")
   
-  fwrite(df, "SupplTable_1_2_netphorest_group_human_bcgr_fisher.txt", sep = "\t")
+  fwrite(df, "Tables\\SupplTable_1_2_netphorest_group_human_bcgr_fisher.txt", sep = "\t")
 
 })

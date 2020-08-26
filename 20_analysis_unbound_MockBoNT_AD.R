@@ -11,12 +11,13 @@
 # "plots\\MockBoNT_AD_log2_raw_intensities.pdf"
 # "plots\\ProteinGroups_MockBoNT_AD_Volcano_pmod_log2FC.pdf"
 # "plots\\MockBoNT_AD_selected_proteins.pdf"
-# "SupplData02_Proteingroups_Intensities_MockBoNT_AD.txt"
-# "Figures\\SupplFig_4ABC\\ProteinGroups_MockBoNT_AD.txt"
+# "SupplData\\SupplData02_Proteingroups_Intensities_MockBoNT_AD.txt"
+# "Figures\\SupplFig_3ABC\\ProteinGroups_MockBoNT_AD.txt"
 
 local({
 
-  if(!dir.exists("Figures\\SupplFig_4ABC")) dir.create("Figures\\SupplFig_4ABC", recursive = TRUE)
+  if(!dir.exists("Figures\\SupplFig_3ABC")) dir.create("Figures\\SupplFig_3ABC", recursive = TRUE)
+  if(!dir.exists("SupplData")) dir.create("SupplData")
         
   library(data.table)
   library(stringr)
@@ -240,9 +241,9 @@ local({
   
   names(df_sub)
   
-  fwrite(df_sub, "SupplData02_Proteingroups_Intensities_MockBoNT_AD.txt", sep = "\t")
+  fwrite(df_sub, "SupplData\\SupplData02_Proteingroups_Intensities_MockBoNT_AD.txt", sep = "\t")
   
   # provide figure source data
-  fwrite(df_sub, "Figures\\SupplFig_4ABC\\ProteinGroups_MockBoNT_AD.txt", sep = "\t")
+  fwrite(df_sub, "Figures\\SupplFig_3ABC\\ProteinGroups_MockBoNT_AD.txt", sep = "\t")
 
 })

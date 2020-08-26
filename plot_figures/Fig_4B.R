@@ -4,7 +4,7 @@ local({
   
   # minimal percentage of the sites belonging to the same regulation group
   # to consider the protein being mostly regulated the same way
-  min_per <- 75
+  min_per <- 60
   
   prot_groups_count <- fread("Figures\\Fig_4B\\Gene_RegulationGroups.txt")
   

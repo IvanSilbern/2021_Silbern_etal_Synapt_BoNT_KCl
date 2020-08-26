@@ -4,6 +4,7 @@
 # Retrieve functional information for rat, mouse and human proteins
 # use information for rat protein in the first line, supplement missing
 # annotation by annotation of respective mouse and human proteins (if available)
+# add manual annotation of key-words associated with protein function/localization
 #
 # INPUT:
 # "temp\\PhPeptIntensities2.tsv"
@@ -23,6 +24,8 @@ local({
     
   df <- fread("temp\\PhPeptIntensities2.tsv")
   annot_rat <- fread("external\\data_Uniprot\\PhPeptIntensities2_annotation_upID_rat.tsv", check.names = TRUE)
+  annot_man <- fread("external\\manual_annotation_proteins.txt")
+  names(annot_man)[names(annot_man) == "Groups"] <- "Keyword_manual"
   
   # add information about protein length
   # based on uniprot id
@@ -98,6 +101,9 @@ local({
   
   df[is.na(df$Function), Function := annot_mouse$Function[match(df$Gene.name[is.na(df$Function)], annot_mouse$Gene.name)]]
   df[is.na(df$Function), Function := annot_human$Function[match(df$Gene.name[is.na(df$Function)], annot_human$Gene.name)]]
+  
+  # add manual keyword annotation
+  df <- merge(df, annot_man, by = "Gene.name", all.x = TRUE)
   
   # correct annotation
   df[df$Gene.name == "Pcp2", Function := c("May function as a cell-type specific modulator for G protein-mediated cell signaling")]

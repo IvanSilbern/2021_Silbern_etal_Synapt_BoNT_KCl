@@ -17,7 +17,9 @@ local({
   g <- ggplot(counts, aes(np_group, GO_Term))
   
   g <- g + geom_tile(aes(fill = p.val), colour = "grey20")
-  g <- g + scale_fill_gradient(low = "orange", high = "steelblue", na.value = "white", limits = c(0, 0.20), oob = scales::squish,
+  # g <- g + scale_fill_gradient(low = "orange", high = "steelblue", na.value = "white", limits = c(0, 0.20), oob = scales::squish,
+  #                              breaks = c(0, 0.05, 0.1, 0.15, 0.2), label = c("  0.00", "  0.05", "  0.10", "  0.15", "> 0.20"))
+  g <- g + scale_fill_gradient(low = "#fcb533", high = "#51baf4", na.value = "white", limits = c(0, 0.20), oob = scales::squish,
                                breaks = c(0, 0.05, 0.1, 0.15, 0.2), label = c("  0.00", "  0.05", "  0.10", "  0.15", "> 0.20"))
   g <- g + scale_x_discrete(expand = c(0, 0), position = "top", limits = c(levels(counts$np_group)))
   g <- g + scale_y_discrete(expand = c(0, 0), limits = rev(levels(counts$GO_Term)))
