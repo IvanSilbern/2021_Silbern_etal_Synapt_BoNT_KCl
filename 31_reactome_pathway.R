@@ -1,3 +1,19 @@
+# DO:
+# Load Reactome pathways results
+# Select enriched terms of NeuronalSystem category
+# Test differential enrichement between primary Ca-dependent and SV-cycling-dependent groups
+
+# INPUT:
+# "temp\\PhPeptIntensities4.tsv"
+# "temp\\Protein_classification.tsv"
+# "external\\data_Reactome\\reactome_result_all.csv"
+# "external\\data_Reactome\\reactome_mapping_all.csv"
+# "external\\data_Reactome\\containedEvents_R-HSA-112316_NeuronalSystem.json"
+
+# OUTPUT:
+# "plots\\Reactome_count.pdf"
+# "plots\\Reactome_pvalue.pdf"
+
 local({
   
   library(data.table)
