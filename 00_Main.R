@@ -84,6 +84,8 @@ source("27_plot_selected_genes_no_legend_svg.R")
 # source("28_plot_regulated_sites_pdf.R")
 # source("29_prepare_shinyapp_plots_svg.R")
 
+source("30_Annotation_Manual.R")
+source("31_reactome_pathway.R")
 
 # compare to Engholm-Keller data
 source("comparison_EK//01_prepare_phosphosite_table_EK.R")

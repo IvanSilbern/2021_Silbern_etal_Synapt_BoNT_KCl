@@ -114,7 +114,7 @@ local({
     #g <- g + geom_line(data = df[df$Selected], col = selected_line_col, alpha = 0.7)
     g <- g + geom_text_repel(data = df[df$variable != "Begin" & df$Enriched],
                              segment.color = "grey65",
-                             size = 5 * 0.6,
+                             size = 5 * 0.6 * 1.2,
                              #color = enriched_text_col,
                              fontface = "bold",
                              ylim = c(0.2, y_limit - 0.05*y_limit),
@@ -125,7 +125,7 @@ local({
     )
     g <- g + geom_text_repel(data = df[df$variable != "Begin" & !df$Enriched],
                              segment.color = "grey65",
-                             size = 5 * 0.6,
+                             size = 5 * 0.6 * 1.2,
                              #color = enriched_text_col,
                              fontface = "bold",
                              ylim = c(-0.2, -(y_limit - 0.05*y_limit)),
@@ -138,16 +138,6 @@ local({
     g <- g + ylab("log2 Fold Change")
     g <- g + guides(color = guide_legend(title = "Regulation:", override.aes = list(size = 1.2), order = 1),
                     fill  = guide_legend(title = "Domains and Regions:"))
-    # g <- g + theme(legend.justification = c(1, 0),
-    #                legend.direction     = "horizontal",
-    #                legend.position      = c(0.98, 0.92),
-    #                legend.background    = element_rect(fill = scales::alpha("white", 0.2)),
-    #                #legend.background    = element_rect(fill = NA),
-    #                legend.key           = element_rect(fill = "white"),
-    #                legend.title         = element_blank(),
-    #                legend.text          = element_text(face = "bold"),
-    #                plot.subtitle        = element_text(face = "bold"))
-    
     g
     
   }
