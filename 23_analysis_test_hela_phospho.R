@@ -15,7 +15,7 @@
 
 local({
         
-        if(!dir.exists("Figures\\SupplFig_4")) dir.create("Figures\\SupplFig_4", recursive = TRUE)
+        if(!dir.exists("Figures\\SupplFig_17")) dir.create("Figures\\SupplFig_17", recursive = TRUE)
                 
         library(data.table)
         library(stringr)
@@ -224,6 +224,6 @@ local({
         temp[, Protein.name := str_match(Fasta.headers, "\\s(.*?)\\sOS=")[,2]]
         
         
-        fwrite(temp, "Figures\\SupplFig_4\\ProteinGroups_HeLa_PhSites_Contrasts.txt", sep = "\t")
+        fwrite(temp, "Figures\\SupplFig_17\\ProteinGroups_HeLa_PhSites_Contrasts.txt", sep = "\t")
 
 })

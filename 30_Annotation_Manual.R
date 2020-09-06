@@ -7,11 +7,11 @@
 
 # OUTPUT:
 # "plots\\SupplFig_ManualAnnot.pdf"
-# "Figures\\SupplFig_6\\sites_keyword_count.txt"
+# "Figures\\SupplFig_5\\sites_keyword_count.txt"
 
 local({
   
-  if(!dir.exists("Figures\\SupplFig_6")) dir.create("Figures\\Fig_6", recursive = TRUE)
+  if(!dir.exists("Figures\\SupplFig_5")) dir.create("Figures\\Fig_6", recursive = TRUE)
   
   library(data.table)
   library(stringr)
@@ -61,6 +61,6 @@ local({
   
   # provide source data
   
-  fwrite(groups_long, "Figures\\SupplFig_6\\sites_keyword_count.txt", sep = "\t")
+  fwrite(groups_long, "Figures\\SupplFig_5\\sites_keyword_count.txt", sep = "\t")
 
 })

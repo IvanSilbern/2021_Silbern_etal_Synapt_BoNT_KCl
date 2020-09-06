@@ -18,7 +18,7 @@ local({
   
   if(!dir.exists("SupplData")) dir.create("SupplData")
   
-  if(!dir.exists("Figures\\SupplFig_3DEF")) dir.create("Figures\\SupplFig_3DEF", recursive = TRUE)
+  if(!dir.exists("Figures\\SupplFig_16DEF")) dir.create("Figures\\SupplFig_16DEF", recursive = TRUE)
   
   library(data.table)
   library(stringr)
@@ -245,6 +245,6 @@ local({
   fwrite(df_sub, "SupplData\\SupplData03_Proteingroups_Intensities_MockBoNT_CB.txt", sep = "\t")
   
   # provide figure source data
-  fwrite(df_sub, "Figures\\SupplFig_3DEF\\ProteinGroups_MockBoNT_CB.txt", sep = "\t")
+  fwrite(df_sub, "Figures\\SupplFig_16DEF\\ProteinGroups_MockBoNT_CB.txt", sep = "\t")
   
 })
