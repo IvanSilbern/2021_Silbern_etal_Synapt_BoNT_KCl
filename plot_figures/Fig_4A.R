@@ -6,6 +6,9 @@ local({
   ph_cand <- fread("Figures\\Fig_4A\\Calcium_vs_Cycling_all.txt")
   ph_cand[, Regulation_group := factor(Regulation_group, levels = c("primary Ca-dependent", "SV-cycling-dependent", "not-affected"))]
   
+  coord_min <- min(c(ph_cand$log2FC.CaEGTA, ph_cand$log2FC.BoNT), na.rm = TRUE)
+  coord_max <- max(c(ph_cand$log2FC.CaEGTA, ph_cand$log2FC.BoNT), na.rm = TRUE)
+  
   pdf("Figures\\Fig_4A\\Fig_4A.pdf", width = 10 , height = 7)
   g <- ggplot(ph_cand, aes(x = log2FC.BoNT, y = log2FC.CaEGTA, color = Regulation_group))
   g <- g + geom_point(alpha = 0.4)
