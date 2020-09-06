@@ -134,7 +134,7 @@ local({
     )
     g <- g + ggtitle(title, subtitle = subtitle)
     g <- g + ylab("log2 Fold Change")
-    g <- g + guides(color = guide_legend(title = "Regulation:", override.aes = list(size = 1.2), order = 1),
+    g <- g + guides(color = guide_legend(title = "Regulation:", override.aes = list(size = 1.2), order = 1, label.hjust = 0),
                     fill  = guide_legend(title = "Domains and Regions:"))
     # g <- g + theme(legend.justification = c(1, 0),
     #                legend.direction     = "horizontal",
