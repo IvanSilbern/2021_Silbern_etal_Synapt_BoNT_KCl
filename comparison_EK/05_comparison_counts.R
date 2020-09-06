@@ -53,17 +53,17 @@ local({
   take_caegta_01 <- take_caegta_01_1 | take_caegta_01_2 | take_caegta_01_3
   take_caegta_02 <- take_caegta_02_1 | take_caegta_02_2 | take_caegta_02_3
 
-  cnames_BoNT_01_1 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_AD_01___1", names(ph_s), value = TRUE)
-  cnames_BoNT_01_2 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_AD_01___2", names(ph_s), value = TRUE)
-  cnames_BoNT_01_3 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_AD_01___3", names(ph_s), value = TRUE)
+  cnames_BoNT_01_1 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_AD_01___1", names(ph_s), value = TRUE)
+  cnames_BoNT_01_2 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_AD_01___2", names(ph_s), value = TRUE)
+  cnames_BoNT_01_3 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_AD_01___3", names(ph_s), value = TRUE)
 
   take_BoNT_01_1 <- apply(ph_s[, ..cnames_BoNT_01_1], 1, function(x) sum(x == 0) < 4)
   take_BoNT_01_2 <- apply(ph_s[, ..cnames_BoNT_01_2], 1, function(x) sum(x == 0) < 4)
   take_BoNT_01_3 <- apply(ph_s[, ..cnames_BoNT_01_3], 1, function(x) sum(x == 0) < 4)
 
-  cnames_BoNT_02_1 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_CB_02___1", names(ph_s), value = TRUE)
-  cnames_BoNT_02_2 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_CB_02___2", names(ph_s), value = TRUE)
-  cnames_BoNT_02_3 <- grep("Reporter\\.intensity\\.[1-6]\\.BoNT_CB_02___3", names(ph_s), value = TRUE)
+  cnames_BoNT_02_1 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_CB_02___1", names(ph_s), value = TRUE)
+  cnames_BoNT_02_2 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_CB_02___2", names(ph_s), value = TRUE)
+  cnames_BoNT_02_3 <- grep("Reporter\\.intensity\\.[1-6]\\.BTX_CB_02___3", names(ph_s), value = TRUE)
 
   take_BoNT_02_1 <- apply(ph_s[, ..cnames_BoNT_02_1], 1, function(x) sum(x == 0) < 4)
   take_BoNT_02_2 <- apply(ph_s[, ..cnames_BoNT_02_2], 1, function(x) sum(x == 0) < 4)
@@ -152,10 +152,10 @@ local({
                                                    "Engholm-Keller et al:\nKCl vs Mock-Stim."))]
   df[, Localization_prob := factor(Localization_prob, levels = c("Any", "> 0.75"))]
   
-  fwrite(df, "comparison_EK\\temp\\nr_quant_sites.txt")
-  fwrite(df, "Figures\\Fig_2A\\nr_quant_sites.txt")
-  fwrite(df_prot, "comparison_EK\\temp\\nr_quant_prot.txt")
-  fwrite(df_sw, "comparison_EK\\temp\\nr_quant_seqwind.txt")
+  fwrite(df, "comparison_EK\\temp\\nr_quant_sites.txt", sep = "\t")
+  fwrite(df, "Figures\\Fig_2A\\nr_quant_sites.txt", sep = "\t")
+  fwrite(df_prot, "comparison_EK\\temp\\nr_quant_prot.txt", sep = "\t")
+  fwrite(df_sw, "comparison_EK\\temp\\nr_quant_seqwind.txt", sep = "\t")
 
   pdf("comparison_EK\\plots\\BarPlot_Sites_Count.pdf", width = 10)
   g <- ggplot(df, aes(y = counts, x = Localization_prob, fill = Localization_prob))
@@ -173,7 +173,7 @@ local({
                  legend.text = element_text(size = 18),
                  legend.title = element_text(size = 18))
   g <- g + guides(fill = guide_legend(title = "Localization Prob.\n(MaxQuant)"))
-  g
+  print(g)
   dev.off()
 
 })
