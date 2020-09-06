@@ -1,3 +1,19 @@
+# DO: comparison on MockBoNT and CaEGTA experiments
+
+# INPUT: 
+# "temp\\PhPeptIntensities_slim.tsv"
+
+#OUTPUT:
+# "temp\\Candidate_GeneNames_both.tsv"
+# "temp\\Candidate_Accession_CaEGTA.tsv"
+# "temp\\Candidate_Accession_BoNT.tsv"
+# "temp\\Candidate_Accession_Both.tsv"
+# "plots\\CaEGTA_vs_MockBoNT_all.pdf"
+# "temp\\PhIntensities_cand.tsv"
+# "temp\\Gene_RegulationGroups_per.tsv"
+
+
+
 local({
 
   if(!dir.exists("Figures\\Fig_4A")) dir.create("Figures\\Fig_4A", recursive = TRUE)

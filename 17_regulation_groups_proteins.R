@@ -2,10 +2,8 @@
 # count number of regulated sites per protein and regulateion group
 # assign protein to one of the regulation groups
 # based on the phosphosites the protein carry
-# if > 60% of the sites are Ca-dependent, Ca-compensating, or Cycling-dependent,
-# then the protein is also considered as being Ca-dependent, Ca-compensating, or Cycling-dependent, respectively
-# if > 60% are Ca-compensating and Cycling-dependent together, then the protein is "Ca-comp." or "Cycling-dep."
-# if > 60% are Ca-dependent and Ca-enhancing toghether, then the protein is classified as "Ca-dep. or Ca-enh."
+# if > 60% of the sites are primary Ca-dependent or SV-cycling dependent,
+# then the protein is also considered as being primary Ca-dependent or SV-cycling-dependent, respectively
 # in other cases the protein is classified as "mixed"
 
 # INPUT:

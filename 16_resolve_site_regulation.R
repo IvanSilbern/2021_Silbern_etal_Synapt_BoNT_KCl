@@ -3,13 +3,7 @@
 # select regulation group for sites
 # that were quantified with several multiplicities
 # and two or more "multiplicity" versions of the site are significantly regulated.
-# Prefer phosphorylation events for which both log2FC are defined, in CaEGTA and MockBoNT.
-# If two multiplisity state have only one log2FC defined (only possible if Ca-dep. or Cycling-dep.),
-# and their regulation groups are different (one is Ca-dep., another is Cycling-dep.), consider the site
-# as Ca-compensating
-# If multiplicities of the same site belong to different regulation group and have log2FC defined in both experiments,
-# use the regulation group of the phosphorylation event with the highest calcium-effect (Ca-dependent or Ca-compensating
-# regulation groups will be preferred in this case)
+# If one of the multiplicity states is "SV-cycling-dependent", the site is termed "SV-cycling-dependent" as well.
 
 # INPUT:
 # "temp\\PhPeptIntensities3.tsv"

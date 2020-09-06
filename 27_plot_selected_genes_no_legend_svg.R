@@ -1,4 +1,14 @@
-# prepare line plots
+# DO:
+# prepare line plots for selected proteins without legend
+
+# INPUT:
+# "temp\\PhPeptInt_BoNT.tsv"
+# "temp\\PhPeptInt_CaEGTA.tsv"
+# "temp\\Domains.tsv"
+
+# OUTPUT:
+# diverse plots in "plots\\Lineplots_selected_noLegend\\"
+
 
 local({
   
