@@ -8,8 +8,8 @@
 # "temp\\Domains.tsv"
 
 # OUTPUT:
-# "SupplData05_Phosphoproteins_regulated_CaEGTA.pdf"
-# "SupplData06_Phosphoproteins_regulated_MockBoNT.pdf"
+# "SupplData\\SupplData05_Phosphoproteins_regulated_CaEGTA.pdf"
+# "SupplData\\SupplData06_Phosphoproteins_regulated_MockBoNT.pdf"
 
 local({
   
@@ -84,7 +84,7 @@ local({
                                 values = c("primary Ca-dependent" = "#fcb533",  # yellow #ffdd55
                                            "SV-cycling-dependent" = "#51baf4",  # cyan   #aaeeff
                                            "not-affected"     = scales::alpha("black", 0.6)),
-                                labels = c("primary Ca-dependent",
+                                labels = c(expression(paste("primary Ca"^"2+", "-dependent")),
                                            "SV-cycling-dependent",
                                            "not-affected"),
                                 name = "")
@@ -133,7 +133,7 @@ local({
     )
     g <- g + ggtitle(title, subtitle = subtitle)
     g <- g + ylab("log2 Fold Change")
-    g <- g + guides(color = guide_legend(title = "Regulation:", override.aes = list(size = 1.2), order = 1),
+    g <- g + guides(color = guide_legend(title = "Regulation:", override.aes = list(size = 1.2), order = 1, label.hjust = 0),
                     fill  = guide_legend(title = "Domains and Regions:"))
     # g <- g + theme(legend.justification = c(1, 0),
     #                legend.direction     = "horizontal",
@@ -166,7 +166,7 @@ local({
   # caegta
   pb <- txtProgressBar(min = 1, max = length(acc), char = "*", style = 3)
   
-  pdf("SupplData5_Phosphoproteins_regulated_CaEGTA.pdf", width = 10, height = 6)
+  pdf("SupplData\\SupplData05_Phosphoproteins_regulated_CaEGTA.pdf", width = 10, height = 6)
   
   for(i in seq_along(acc)){
     
@@ -200,7 +200,7 @@ local({
   # bont
   pb <- txtProgressBar(min = 1, max = length(acc), char = "*", style = 3)
   
-  pdf("SupplData6_Phosphoproteins_regulated_MockBoNT.pdf", width = 10, height = 6)
+  pdf("SupplData\\SupplData06_Phosphoproteins_regulated_MockBoNT.pdf", width = 10, height = 6)
   
   for(i in seq_along(acc)){
     
