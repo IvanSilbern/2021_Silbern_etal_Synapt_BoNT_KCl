@@ -85,7 +85,7 @@ local({
                                 values = c("primary Ca-dependent" = "#fcb533",  # yellow #ffdd55
                                            "SV-cycling-dependent" = "#51baf4",  # cyan   #aaeeff
                                            "not-affected"     = scales::alpha("black", 0.6)),
-                                labels = c("primary Ca-dependent",
+                                labels = c(expression(paste("primary Ca"^"2+", "-dependent")),
                                            "SV-cycling-dependent",
                                            "not-affected"),
                                 name = "")
