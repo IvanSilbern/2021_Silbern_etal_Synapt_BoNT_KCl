@@ -13,12 +13,12 @@ local({
                 "UT01", "UT02", "UT03")
   
   # Boxplots
-  pdf("Figures\\SupplFig_4\\SupplFig_17A.pdf", width = 9)
+  pdf("Figures\\SupplFig_17\\SupplFig_17A.pdf", width = 9)
   boxplot(log2(temp[, ..int_cols]))
   dev.off()
   
   # BoNT vs Mock
-  pdf("Figures\\SupplFig_4\\SupplFig_17B.pdf")
+  pdf("Figures\\SupplFig_17\\SupplFig_17B.pdf")
   plot(y = -log10(temp$q.val),
        x = temp$log2FC,
        type = "n",
@@ -39,7 +39,7 @@ local({
   dev.off()
   
   # Mock vs UT
-  pdf("Figures\\SupplFig_4\\SupplFig_17C.pdf")
+  pdf("Figures\\SupplFig_17\\SupplFig_17C.pdf")
   plot(y = -log10(temp$q.val),
        x = temp$log2FC,
        type = "n",
@@ -60,7 +60,7 @@ local({
   dev.off()
   
   # BoNT vs UT
-  pdf("Figures\\SupplFig_4\\SupplFig_17D.pdf")
+  pdf("Figures\\SupplFig_17\\SupplFig_17D.pdf")
   plot(y = -log10(temp$q.val),
        x = temp$log2FC,
        type = "n",

@@ -11,13 +11,13 @@
 
 local({
   
-  if(!dir.exists("Figures\\SupplFig_5")) dir.create("Figures\\Fig_6", recursive = TRUE)
+  if(!dir.exists("Figures\\SupplFig_5")) dir.create("Figures\\SupplFig_5", recursive = TRUE)
   
   library(data.table)
   library(stringr)
   library(ggplot2)
   
-  df <- fread("temp\\Protein_classification.txt")
+  df <- fread("temp\\Protein_classification.tsv")
   names(df)
   
   count_cols <- c("Ca_dependent", "Cycling_dependent")

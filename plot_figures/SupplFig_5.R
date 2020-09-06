@@ -24,7 +24,7 @@ local({
   g <- g + guides(fill = guide_legend(title = "Regulation group", label.hjust = 0))
   print(g)
   
-  pdf("Figures\\SupplFig_6\\SupplFig_5_ManualAnnot.pdf", width = 12, height = 7)
+  pdf("Figures\\SupplFig_5\\SupplFig_5_ManualAnnot.pdf", width = 12, height = 7)
   print(g)
   dev.off()
   
