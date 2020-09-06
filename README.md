@@ -21,8 +21,8 @@ Start R and set working directory to the location of "00_Main.R" file or start "
 Intermediate results are generated and stored in "/temp" folder.  
 Intermediate plots are generated and stored in the "/plots" folder.  
 Source data for figures provided in the paper are generated during the script execution and stored in "/Figures".
-Figures that were used in the publication (omitting smaller format adjustments) are produced while executing scripts in "plot_figures" figures and stored in "/Figures" folder.
-Supplementary Data are gerenrated during the execution and stored in the woking directory directly.  
+Figures that were used in the publication (omitting smaller format adjustments) are produced while executing scripts in "plot_figures" and stored in the "/Figures" folder.
+Supplementary Data are gerenrated during the execution and stored in the "/SupplData" directory.  
 Intermediate data and plots used for comparsion with Engholm-Keller data are stored in the "/comparison_EK" folder directly. 
 Data used by ShinyApp for visualization of log2 fold changes in phosphorylation site intensities on proteins are stored in "/ShinyApp" folder.
 
@@ -37,6 +37,7 @@ Data used by ShinyApp for visualization of log2 fold changes in phosphorylation 
 - ggrepel (v. 0.8.1),
 - igraph (v. 1.2.4.2)
 - VennDiagram (v. 1.6.20)
+- rjson (v. 0.2.20)
 
 ### Session Info:
 ```
