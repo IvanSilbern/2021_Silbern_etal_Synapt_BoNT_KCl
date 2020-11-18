@@ -25,7 +25,7 @@ local({
   library(limma)
   library(qvalue)
 
-  pg <- fread("search_results\\Unbound_MockBoNT_AD\\combined\\txt\\proteinGroups.txt", check.names = TRUE)
+  pg <- fread("search_results\\Unbound_MockBoNT_AD\\combined\\txt\\proteinGroups.txt.gz", check.names = TRUE)
 
   # remove potential contaminants and reversed sequences
   # exclude proteins with < 2 uniqute/razor peptides from quantification
