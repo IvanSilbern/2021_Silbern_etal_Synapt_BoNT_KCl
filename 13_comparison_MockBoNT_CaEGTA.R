@@ -11,6 +11,7 @@
 # "plots\\CaEGTA_vs_MockBoNT_all.pdf"
 # "temp\\PhIntensities_cand.tsv"
 # "temp\\Gene_RegulationGroups_per.tsv"
+# "temp\\Fig4A_number_sites_section.tsv"
 
 
 
@@ -108,6 +109,22 @@ local({
   
   coord_min <- min(c(ph_cand$log2FC.CaEGTA, ph_cand$log2FC.BoNT), na.rm = TRUE)
   coord_max <- max(c(ph_cand$log2FC.CaEGTA, ph_cand$log2FC.BoNT), na.rm = TRUE)
+  
+  n_sites <- data.table(id = 1:9,
+                        n  = c(ph_cand[log2FC.CaEGTA > log2(1.2) & log2FC.BoNT < log2(1/1.2), .N],
+                               ph_cand[log2FC.CaEGTA > log2(1.2) & abs(log2FC.BoNT) < log2(1.2), .N],
+                               ph_cand[log2FC.CaEGTA > log2(1.2) & log2FC.BoNT > log2(1.2), .N],
+                               ph_cand[abs(log2FC.CaEGTA) < log2(1.2) & log2FC.BoNT < log2(1/1.2), .N],
+                               ph_cand[abs(log2FC.CaEGTA) < log2(1.2) & abs(log2FC.BoNT) < log2(1.2), .N],
+                               ph_cand[abs(log2FC.CaEGTA) < log2(1.2) & log2FC.BoNT > log2(1.2), .N],
+                               ph_cand[log2FC.CaEGTA < log2(1/1.2) & log2FC.BoNT < log2(1/1.2), .N],
+                               ph_cand[log2FC.CaEGTA < log2(1/1.2) & abs(log2FC.BoNT) < log2(1.2), .N],
+                               ph_cand[log2FC.CaEGTA < log2(1/1.2) & log2FC.BoNT > log2(1.2), .N]))
+  
+  n_sites[, per := round(100*n/ph_cand[, .N], 1)]
+  
+  fwrite(n_sites, "temp\\Fig4A_number_sites_section.tsv", sep = "\t")
+  
   
   pdf("plots\\CaEGTA_vs_MockBoNT_all.pdf", width = 10 , height = 7)
   g <- ggplot(ph_cand, aes(x = log2FC.BoNT, y = log2FC.CaEGTA, color = Regulation_group))

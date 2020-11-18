@@ -78,7 +78,11 @@ local({
   sum(take_BoNT_02)
 
   take_caegta <- take_caegta_01 | take_caegta_02
+  take_bont   <- take_BoNT_01 | take_BoNT_02
   take_all    <- take_BoNT_01 | take_BoNT_02 | take_caegta_01 | take_caegta_02
+  
+  # % of overlapping phosphosites, CaEGTA and BoNT
+  sum(take_caegta & take_bont & ph_s$Localization.prob > 0.75)/sum(take_caegta & ph_s$Localization.prob > 0.75)
 
   sum(take_caegta)
   sum(take_all)
