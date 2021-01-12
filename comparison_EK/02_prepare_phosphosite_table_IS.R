@@ -45,7 +45,7 @@ local({
   scores <- scores[!duplicated(scores$UNIPROTKB), ]
   
   #import Phospho STY MQ output table
-  df <- fread( "search_results\\Synapt_Ph\\combined\\txt\\Phospho (STY)Sites.txt", check.names = TRUE)
+  df <- fread( "search_results\\Synapt_Ph\\combined\\txt\\Phospho (STY)Sites.txt.gz", check.names = TRUE)
   
   # remove phosphosites belonging to contaminants or reverse sequences
   message("Remove ", sum(df$Potential.contaminant == "+"),

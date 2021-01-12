@@ -78,6 +78,14 @@ local({
                       "Mapt-S661",
                       "Dpysl5-S532")
   ph_sub2 <- ph_sub[Site_id %in% selected_sites]
+  
+  # check number of sites with positive and negative correlation
+  # positive
+  ph_sub[which((log2FC.CaEGTA > 0 & T1.norm > 0) | (log2FC.CaEGTA < 0 & T1.norm < 0)), .N]
+  ph_sub[which((log2FC.CaEGTA > 0 & T1.norm < 0) | (log2FC.CaEGTA < 0 & T1.norm > 0)), .N]
+  
+  # 198/ (198 + 411)
+  
 
   pdf("comparison_EK\\plots\\Scatterplot_comparison_sign_76mM_10s.pdf", width = 7, height = 7)
   g <- ggplot(ph_sub, aes(x = log2FC.CaEGTA, y = T1.norm, label = Site_id))

@@ -6,8 +6,8 @@
 
 # OUTPUT:
 # Figure source files
-# "Figures\\Fig_3BC\\Fig_2B_source.txt" and 
-# "Figures\\Fig_3BC\\Fig_2C_source.txt"
+# "Figures\\Fig_2BC\\Fig_2B_source.txt" and 
+# "Figures\\Fig_2BC\\Fig_2C_source.txt"
 # 
 # "plots\\Reporter_Int_distributions.pdf"
 # "plots\\Pvalue_histogram_CaEGTA.pdf"

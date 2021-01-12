@@ -18,6 +18,7 @@
 local({
 
   if(!dir.exists("Figures\\Fig_4A")) dir.create("Figures\\Fig_4A", recursive = TRUE)
+  if(!dir.exists("Figures\\SupplFig_3")) dir.create("Figures\\SupplFig_3", recursive = TRUE)
   if(!dir.exists("plots")) dir.create("plots")
   
   library(data.table)
@@ -123,9 +124,6 @@ local({
   
   n_sites[, per := round(100*n/ph_cand[, .N], 1)]
   
-  fwrite(n_sites, "temp\\Fig4A_number_sites_section.tsv", sep = "\t")
-  
-  
   pdf("plots\\CaEGTA_vs_MockBoNT_all.pdf", width = 10 , height = 7)
   g <- ggplot(ph_cand, aes(x = log2FC.BoNT, y = log2FC.CaEGTA, color = Regulation_group))
   g <- g + geom_point(alpha = 0.4)
@@ -145,18 +143,10 @@ local({
   print(g)
   dev.off()
 
-  # provide figure source
-  fwrite(ph_cand[, c("phosphosite_table_id", "Gene.name", "Accession", "Amino.acid",
-                     "Position", "Multiplicity", "q.val.CaEGTA", "log2FC.CaEGTA", "Candidate.CaEGTA",
-                     "q.val.BoNT", "log2FC.BoNT", "Candidate.BoNT", "log2FC.CaEGTA_BoNT",
-                     "Regulation_group")],
-         "Figures\\Fig_4A\\Calcium_vs_Cycling_all.txt", sep = "\t")
-  
-
   # SV-Cycling-dependent group should show q.val.BoNT < 0.01
   # primary Ca-dependent group should show q.val.CaEGTA < 0.01
   
-  ph_cand <- ph_cand[ph_cand$Regulation_group != "not-regulated"]
+  ph_cand <- ph_cand[ph_cand$Regulation_group != "not-affected"]
   
   list_cand <- list(Cycling_dependent = ph_cand[ph_cand$Regulation_group == "SV-cycling-dependent" & (q.val.BoNT < 0.01 | Candidate.CaEGTA)],
                     Ca_dependent = ph_cand[ph_cand$Regulation_group == "primary Ca-dependent" & q.val.CaEGTA < 0.01])
@@ -201,6 +191,18 @@ local({
   print(g)
   dev.off()
 
+  # provide figure source
+  fwrite(ph_cand[, c("phosphosite_table_id", "Gene.name", "Accession", "Amino.acid",
+                     "Position", "Multiplicity", "q.val.CaEGTA", "log2FC.CaEGTA", "Candidate.CaEGTA",
+                     "q.val.BoNT", "log2FC.BoNT", "Candidate.BoNT", "log2FC.CaEGTA_BoNT",
+                     "Regulation_group", "netphorest_group")],
+         "Figures\\Fig_4A\\Calcium_vs_Cycling_all.txt", sep = "\t")
+  fwrite(ph_cand[, c("phosphosite_table_id", "Gene.name", "Accession", "Amino.acid",
+                     "Position", "Multiplicity", "q.val.CaEGTA", "log2FC.CaEGTA", "Candidate.CaEGTA",
+                     "q.val.BoNT", "log2FC.BoNT", "Candidate.BoNT", "log2FC.CaEGTA_BoNT",
+                     "Regulation_group", "netphorest_group")],
+         "Figures\\SupplFig_3\\Calcium_vs_Cycling_all.txt", sep = "\t")
+  
   table(ph_cand$Regulation_group)
 
   fwrite(ph_cand, "temp\\PhIntensities_cand.tsv", sep = "\t")
