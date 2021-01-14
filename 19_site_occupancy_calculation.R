@@ -21,7 +21,7 @@ local({
   library(ggrepel)
   
   if(!dir.exists("temp")) dir.create("temp")
-  if(!dir.exists("Figures\\SupplFig_4")) dir.create("Figures\\SupplFig_4", recursive = TRUE)
+  if(!dir.exists("Figures\\SupplFig_4")) dir.create("Figures\\SupplFig_4")
   
   samples  <- c("Mock.01", "Mock.02", "Mock.03", "BoNT.01", "BoNT.02", "BoNT.03")
   
@@ -529,6 +529,12 @@ local({
   
   # median occupancy
   median(res[occ.p.val < 0.1, occupancy_mock[1], by = id]$V1)
+  
+  # keep occupancy data only for p-values < 0.1
+  
+  sites[occ.p.val >= 0.1, occupancy_bont := NA]
+  sites[occ.p.val >= 0.1, occupancy_mock := NA]
+  sites[occ.p.val >= 0.1, occupancy_mock_bont := NA]
   
   # save occupancy data
   fwrite(sites, "temp\\PhPeptIntensities5.tsv", sep = "\t")

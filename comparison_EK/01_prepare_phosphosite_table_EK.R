@@ -214,7 +214,7 @@ local({
   
   temp[, Protein      := unlist(lapply(str_split(Proteins_sorted, ";"), "[", 1))]
   temp[, Accession    := unlist(lapply(str_split(Accessions_sorted, ";"), "[", 1))]
-  temp[, Accession    := str_match(Accession, "\\|([^\\s]+)\\|")[, 2]]
+  #temp[, Accession    := str_match(Accession, "\\|([^\\s]+)\\|")[, 2]]
   temp[, Position     := unlist(lapply(str_split(Positions_sorted, ";"), "[", 1))]
   temp[, Gene.name    := unlist(lapply(str_split(Gene.names_sorted, ";"), "[", 1))]
   temp[, Fasta.header := unlist(lapply(str_split(Fasta.headers_sorted, ";"), "[", 1))]
