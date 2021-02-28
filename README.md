@@ -1,11 +1,12 @@
 # README
 
 R scripts and data are provided in support of the publication:
-2020 Silbern et al
+Silbern, I., Pan, K.T., Fiosins, M., Bonn, S., Rizzoli, S.O., Fornasiero, E.F., Urlaub, H. and Jahn, R., 2021. Protein phosphorylation in depolarized synaptosomes: Dissecting primary effects of calcium from synaptic vesicle cycling. Molecular & Cellular Proteomics, p.100061.  
+DOI:https://doi.org/10.1016/j.mcpro.2021.100061
 
 ### Before start
 Download and uncompress "external.zip" folder.
-If you download files from GitHub using git bash, please first install git lfs (https://git-lfs.github.com/) that is aimed at handling large files (e.g. "external.zip" file). If you use web interface for downloading (ìdownload ZIPî), you will download a placeholder for "external.zip" file. To download the actual file, find it in the GitHub repository and click on ìView rawî. Save the file in your local folder. Extract files.
+If you download files from GitHub using git bash, please first install git lfs (https://git-lfs.github.com/) that is aimed at handling large files (e.g. "external.zip" file). If you use web interface for downloading (‚Äúdownload ZIP‚Äù), you will download a placeholder for "external.zip" file. To download the actual file, find it in the GitHub repository and click on ‚ÄúView raw‚Äù. Save the file in your local folder. Extract files.
 IMPORTANT: Files in the "external.zip" are needed for the correct script execution. The content is covered by the third-party licences and is intended for NON-COMMERCIAL use only. The data are provided only for demonstration purporses and are not subject for destribution.   
 
 ### Content
